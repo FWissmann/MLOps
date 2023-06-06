@@ -1,0 +1,11 @@
+schema: '2.0'
+stages:
+  train:
+    cmd: docker start ludwig_experiment_parquet
+    deps:
+    - path: LudwigAI/data/sim_data.parquet
+      md5: f028e371d8e45d3670b365aeec815e6d
+      size: 23901
+    - path: LudwigAI/src/conf.yaml
+      md5: 4cd65ce18d8d26bdd727b4dd6f8e9ea6
+      size: 343

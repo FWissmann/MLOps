@@ -1,0 +1,6 @@
+stages:
+  train:
+    cmd: docker start ludwig_experiment_parquet
+    deps:
+    - LudwigAI/data/sim_data.parquet
+    - LudwigAI/src/conf.yaml
