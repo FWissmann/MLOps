@@ -1,0 +1,16 @@
+input_features:
+    - name: Zeit
+      type: date
+    - name: Komponente
+      type: category
+    - name: Beschreibung
+      type: text
+    - name: IP-Adresse
+      type: text
+    - name: Ereignisname
+      type: text
+    - name: Ereigniskontext
+      type: category
+output_features:
+    - name: Abschlussnote
+      type: number
