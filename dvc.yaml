@@ -4,3 +4,8 @@ stages:
     deps:
     - LudwigAI/data/sim_data.parquet
     - LudwigAI/src/conf.yaml
+  data_gen:
+    cmd: docker run -i --rm --name data_gen_single --mount type=bind,src=/home/aml/MLOps/pipeline,dst=/app/pipeline
+      data_gen:1
+    outs:
+    - ./pipeline/00_sim_data_output/
