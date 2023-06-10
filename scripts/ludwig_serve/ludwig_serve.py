@@ -23,13 +23,13 @@ else:
 print(f'{gctm()}Main thread: Setting URLs ...')
 # The REST API endpoint
 if run_in_docker:
-    url = "http://172.17.0.7:5000/api/2.0/mlflow/"
+    url = "http://172.17.0.6:5000/api/2.0/mlflow/"
 else:
     url = "http://213.136.77.216:5000/api/2.0/mlflow/"
 
 # MLFlow Tracking URI
 if run_in_docker:
-    mlflow_uri = "http://172.17.0.7:5000"
+    mlflow_uri = "http://172.17.0.6:5000"
 else:
     mlflow_uri = "http://213.136.77.216:5000/"
 mlflow.set_tracking_uri(mlflow_uri)
