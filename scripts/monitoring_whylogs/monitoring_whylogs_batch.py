@@ -79,7 +79,7 @@ if response.status_code == 200:
     print(df_results[0])
     print("Differenz: ")
     print(df_results[0] - df["Abschlussnote"])
-# """
+
 # results_whylogs = why.log(pandas=df_results)
 
 #     # grab profile object from result set

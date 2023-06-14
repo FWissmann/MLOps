@@ -48,7 +48,6 @@ current_run = response_json_model["model_versions"][0]["source"]
 # Download model
 print(f'{gctm()}Main thread: Downloading model ...')
 mlflow.artifacts.download_artifacts(artifact_uri = current_run, dst_path="./")
-d
 # Start LudwigAI serve with downloaded model
 print(f'{gctm()}Main thread: Starting LudwigAI serve ...')
 ludwig_serve= subprocess.Popen(lsc_split, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
