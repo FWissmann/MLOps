@@ -1,0 +1,9 @@
+curl -X POST -F 'Ereigniskontext=Forum: xxx' -F 'Beschreibung=The user with id ffkdd created xxx.' -F 'IP-Adresse=179.49.49.54' -F 'Zeit=00:02:59' -F 'Ereignisname=Test Satz erfolgreich' -F 'Komponente=System' http://213.136.77.216:8000/predict
+
+curl -X POST -F 'Ereigniskontext=Forum: xxx' -F 'Beschreibung=The user with id ffkdd created xxx.' -F 'IP-Adresse=179.49.49.54' -F 'Zeit=00:02:59' -F 'Ereignisname=Test Satz erfolgreich' -F 'Komponente=System' http://213.136.77.216:8000/predict
+
+# Batch
+curl -X POST -F 'dataset={"columns" : ["Ereigniskontext", "Beschreibung", "IP-Adresse", "Zeit", "Ereignisname", "Komponente"], "data": [["Forum: xxx", "The user with id ffkdd created xxx.", "179.49.49.54", "00:02:59", "Test Satz erfolgreich", "System"]]}' http://213.136.77.216:8000/batch_predict
+
+# Ergebnis
+{"index":[0],"columns":["Abschlussnote_predictions"],"data":[[2.6587717533111572]]}

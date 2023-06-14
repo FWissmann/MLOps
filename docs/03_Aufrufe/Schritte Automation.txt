@@ -1,0 +1,29 @@
+Flow:
+
+#container data_generator, gx_datacheck und monitoring_whylogs laufen immer
+
+#Im Container data_generator data_generator starten mit 
+python3 data_gen.py
+
+#gesamter Ordne rmit Versionen Kopieren auf Host:
+docker cp data_generator:/home/jovyan/00_sim_data_output /home/aml/data_generator_output
+
+#Order mit CSV Datei von host auf gx-Container kopieren:
+docker cp /home/aml/data_generator_output/00_sim_data_output gx_datacheck:/home/jovyan
+#...alle anderen Versionen auf Host in anderer Order kopieren
+docker cp gx_datacheck:/home/jovyan/01_sim_data_parquet /home/aml/LudwigAI/data/sim_data_versions
+
+#gx datacheck laufen lassen: 
+python3 gx_sim_data.py
+
+#Parquet File auf Host Ludwigai/data kopieren:
+docker cp gx_datacheck:/home/jovyan/01_sim_data_parquet/sim_data.parquet /home/aml/LudwigAI/data/sim_data.parquet
+
+[...Fabian...]
+
+Container monitoring_whylogs starten
+monitoring_whylogs.py
+> WhyLabs Plattform öffnen 
+
+
+

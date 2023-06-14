@@ -1,0 +1,14 @@
+# Ludwig Experiment
+docker run -d --name ludwig_experiment_running --mount type=bind,src=/home/aml/MLOps/pipeline,dst=/app/pipeline --mount type=bind,src=/home/aml/MLOps/conf,dst=/app/conf --env MLFLOW_TRACKING_URI=http://172.17.0.6:5000/ ludwig_experiment:1 experiment --config /app/conf/ludwig_conf.yaml --dataset /app/pipeline/01_sim_data_parquet/sim_data.parquet --output_directory /app/pipeline/02_model_results --mlflow --experiment_name relax --model_name generator
+
+# Data Generator
+docker run -d --name data_gen_running --mount type=bind,src=/home/aml/MLOps/pipeline,dst=/app/pipeline data_gen:1
+
+# Great Expectations
+docker run -d --name gx_sim_data_running --mount type=bind,src=/home/aml/MLOps/pipeline,dst=/app/pipeline gx_sim_data:1
+
+# Ludwig Serve
+docker run -d --name ludwig_serve -p 8000:8000 ludwig_serve:1
+
+# MLFlow
+docker run -d --rm --name mlflow --mount type=bind,src=/home/aml/MLFlow/,dst=/app/ -p 5000:5000 ghcr.io/mlflow/mlflow:v2.3.1 mlflow server -h 0.0.0.0 --backend-store-uri sqlite:///app/mlflow.db --artifacts-destination /app/mlartifacts --default-artifact-root /app/mlruns

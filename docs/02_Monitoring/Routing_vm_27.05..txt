@@ -1,0 +1,63 @@
+
+Last login: Sat May 27 09:04:46 2023 from 46.5.2.215
+aml@vmd32042:~$ ifconfig
+
+Command 'ifconfig' not found, but can be installed with:
+
+sudo apt install net-tools
+
+aml@vmd32042:~$ ip addr show
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: ens18: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 00:50:56:3c:3a:6b brd ff:ff:ff:ff:ff:ff
+    inet 213.136.77.216/24 brd 213.136.77.255 scope global ens18
+       valid_lft forever preferred_lft forever
+    inet6 2a02:c207:3003:2042::1/64 scope global
+       valid_lft forever preferred_lft forever
+    inet6 fe80::250:56ff:fe3c:3a6b/64 scope link
+       valid_lft forever preferred_lft forever
+3: docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 02:42:62:80:9e:2c brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:62ff:fe80:9e2c/64 scope link
+       valid_lft forever preferred_lft forever
+774: vethfff3a19@if773: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default
+    link/ether de:37:86:5d:3a:94 brd ff:ff:ff:ff:ff:ff link-netnsid 2
+    inet6 fe80::dc37:86ff:fe5d:3a94/64 scope link
+       valid_lft forever preferred_lft forever
+14: br-cc82c92036ec: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether 02:42:5b:7f:f4:1f brd ff:ff:ff:ff:ff:ff
+    inet 172.20.0.1/16 brd 172.20.255.255 scope global br-cc82c92036ec
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:5bff:fe7f:f41f/64 scope link
+       valid_lft forever preferred_lft forever
+16: vethb4c5855@if15: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master br-cc82c92036ec state UP group default
+    link/ether 46:35:ad:23:df:62 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet6 fe80::4435:adff:fe23:df62/64 scope link
+       valid_lft forever preferred_lft forever
+1054: veth77e692e@if1053: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default
+    link/ether 9e:f9:fc:07:cc:ee brd ff:ff:ff:ff:ff:ff link-netnsid 1
+    inet6 fe80::9cf9:fcff:fe07:ccee/64 scope link
+       valid_lft forever preferred_lft forever
+950: vethb1ed836@if949: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default
+    link/ether 32:05:23:eb:4b:20 brd ff:ff:ff:ff:ff:ff link-netnsid 3
+    inet6 fe80::3005:23ff:feeb:4b20/64 scope link
+       valid_lft forever preferred_lft forever
+992: veth3e8a4af@if991: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default
+    link/ether 6e:2a:98:69:65:60 brd ff:ff:ff:ff:ff:ff link-netnsid 4
+    inet6 fe80::6c2a:98ff:fe69:6560/64 scope link
+       valid_lft forever preferred_lft forever
+1000: vethd545dcb@if999: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default
+    link/ether ae:b5:78:ec:1e:69 brd ff:ff:ff:ff:ff:ff link-netnsid 5
+    inet6 fe80::acb5:78ff:feec:1e69/64 scope link
+       valid_lft forever preferred_lft forever
+1006: vethf4febe2@if1005: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master docker0 state UP group default
+    link/ether 9e:55:0e:9c:08:c1 brd ff:ff:ff:ff:ff:ff link-netnsid 6
+    inet6 fe80::9c55:eff:fe9c:8c1/64 scope link
+       valid_lft forever preferred_lft forever

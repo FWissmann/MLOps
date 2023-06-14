@@ -1,0 +1,25 @@
+                                                                                                          
+import whylogs as why
+import pandas as pd
+
+df = pd.read_csv("https://whylabs-public.s3.us-west-2.amazonaws.com/datasets/tour/current.csv")
+
+# profile dataframe
+results = why.log(pandas=df)
+
+# grab profile object from result set
+profile = results.profile()
+
+# grab a view object of the profile for inspection
+prof_view = profile.view()
+
+# inspect profile as a Pandas DataFrame
+prof_df = prof_view.to_pandas()
+
+
+print(df.head())
+print(profile)
+
+print(prof_view)
+
+print(prof_df)

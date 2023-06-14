@@ -1,0 +1,75 @@
+aml@vmd32042:~$ sudo ufw status
+[sudo] password for aml:
+Status: active
+
+To                         Action      From
+--                         ------      ----
+22                         ALLOW       Anywhere
+22/tcp                     ALLOW       Anywhere
+9443/tcp                   ALLOW       Anywhere                   # Portainer
+22 (v6)                    ALLOW       Anywhere (v6)
+22/tcp (v6)                ALLOW       Anywhere (v6)
+9443/tcp (v6)              ALLOW       Anywhere (v6)              # Portainer
+
+aml@vmd32042:~$
+aml@vmd32042:~$ This server is hosted by Contabo. If you have any questions or n                                                                                                                                                             eed help,
+--                         ------      ----
+22                         ALLOW       Anywhere
+22/tcp                     ALLOW       Anywhere
+9443/tcp                   ALLOW       Anywhere                   # Portainer
+22 (v6)                    ALLOW       Anywhere (v6)
+22/tcp (v6)                ALLOW       Anywhere (v6)
+9443/tcp (v6)              ALLOW       Anywhere (v6)              # Portainer
+
+aml@vmd32042:~$
+This: command not found
+aml@vmd32042:~$ please don't hesitate to contact us at support@contabo.com.
+>
+> Last login: Sat May 27 01:42:54 2023 from 46.5.255.85
+> aml@vmd32042:~$ sudo ufw status
+> [sudo] password for aml:
+> Status: active
+>
+> To                         Action      From
+> --                         ------      ----
+> 22                         ALLOW       Anywhere
+> 22/tcp                     ALLOW       Anywhere
+> 9443/tcp                   ALLOW       Anywhere                   # Portainer
+> 22 (v6)                    ALLOW       Anywhere (v6)
+> 22/tcp (v6)                ALLOW       Anywhere (v6)
+> 9443/tcp (v6)              ALLOW       Anywhere (v6)              # Portainer
+>
+> aml@vmd32042:~$
+> ^C
+aml@vmd32042:~$ sudo ufw show numbered
+ERROR: Invalid syntax
+
+Usage: ufw COMMAND
+
+Commands:
+ enable                          enables the firewall
+ disable                         disables the firewall
+ default ARG                     set default policy
+ logging LEVEL                   set logging to LEVEL
+ allow ARGS                      add allow rule
+ deny ARGS                       add deny rule
+ reject ARGS                     add reject rule
+ limit ARGS                      add limit rule
+ delete RULE|NUM                 delete RULE
+ insert NUM RULE                 insert RULE at NUM
+ route RULE                      add route RULE
+ route delete RULE|NUM           delete route RULE
+ route insert NUM RULE           insert route RULE at NUM
+ reload                          reload firewall
+ reset                           reset firewall
+ status                          show firewall status
+ status numbered                 show firewall status as numbered list of RULES
+ status verbose                  show verbose firewall status
+ show ARG                        show firewall report
+ version                         display version information
+
+Application profile commands:
+ app list                        list application profiles
+ app info PROFILE                show information on PROFILE
+ app update PROFILE              update PROFILE
+ app default ARG                 set default application policy

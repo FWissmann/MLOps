@@ -1,0 +1,47 @@
+Befehle vom Host: 
+
+#python-Script data_generator sichern
+docker cp data_generator:/home/jovyan/data_gen.py /home/aml/scripts_save/data_gen_save.py
+#V2
+docker cp data_generator:/home/jovyan/data_gen_V2.py /home/aml/scripts_save/data_gen_V2_save.py
+
+#csv Output Datei auf Host kopieren
+docker cp data_generator:/home/jovyan/00_sim_data_output/simulated_data_grade.csv /home/aml/data_generator_output/simulated_data_grade.csv
+#gesamter Ordner 
+docker cp data_generator:/home/jovyan/00_sim_data_output /home/aml/data_generator_output
+#V2
+docker cp data_generator:/home/jovyan/00_sim_data_output/simulated_data_grade_V2.csv /home/aml/data_generator_output/simulated_data_grade_V2.csv
+
+#csv Output Datei auf Container gx_datacheck kopieren
+docker cp /home/aml/data_generator_output/00_sim_data_output gx_datacheck:/home/jovyan
+#V2
+docker cp /home/aml/data_generator_output/simulated_data_grade_V2.csv gx_datacheck:/home/jovyan/00_sim_data_output/simulated_data_grade_V2.csv
+
+#parquet Output Datei auf Host kopieren
+docker cp gx_datacheck:/home/jovyan/01_sim_data_parquet/sim_data.parquet /home/aml/LudwigAI/data/sim_data.parquet
+#Versionen in anderer Ordner auf dem Host
+docker cp gx_datacheck:/home/jovyan/01_sim_data_parquet /home/aml/LudwigAI/data/sim_data_versions
+#V2
+docker cp gx_datacheck:/home/jovyan/01_sim_data_parquet/sim_data_V2.parquet /home/aml/LudwigAI/data/sim_data_V2.parquet
+
+#python-Script gx_datacheck sichern
+docker cp gx_datacheck:/home/jovyan/gx_sim_data.py /home/aml/scripts_save/gx_sim_data_save.py
+#V2
+docker cp gx_datacheck:/home/jovyan/gx_sim_data_V2.py /home/aml/scripts_save/gx_sim_data_V2_save.py
+
+#test: manuell json Dateien von host auf container monitoring_whylogs (später über REST)
+docker cp /home/aml/whylogs_data_manuell/model_hyperparameters.json monitoring_whylogs:/opt/whylogs-container/00_mlmodel_manuell/model_hyperparameters.json
+docker cp /home/aml/whylogs_data_manuell/training_progress.json monitoring_whylogs:/opt/whylogs-container/00_mlmodel_manuell/training_progress.json
+docker cp /home/aml/whylogs_data_manuell/training_set_metadata.json monitoring_whylogs:/opt/whylogs-container/00_mlmodel_manuell/training_set_metadata.json
+
+#python-Script monitoring_whylogs sichern
+docker cp monitoring_whylogs:/opt/whylogs-container/monitoring_whylogs.py /home/aml/scripts_save/monitoring_whylogs_save.py
+#CURL speichern
+docker cp monitoring_whylogs:/opt/whylogs-container/monitoring_whylogs_curl.py /home/aml/scripts_save/monitoring_whylogs_curl_save.py
+docker cp monitoring_whylogs:/opt/whylogs-container/check_server.py /home/aml/scripts_save/check_server_save.py
+
+#files von save_files wiederherstellen
+docker cp /home/aml/scripts_save/monitoring_whylogs_save.py monitoring_whylogs_v2:/opt/whylogs-container/monitoring_whylogs.py
+
+#csv Test Datei manuell einlesen in wylogs 
+docker cp /home/aml/whylogs_data_manuell/Abschlussnote_predictions.csv monitoring_whylogs:/opt/whylogs-container/00_mlmodel_manuell/Abschlussnote_predictions.csv

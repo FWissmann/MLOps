@@ -1,0 +1,26 @@
+Zugang LINUX PC
+
+Design und Datenformat
+Decker, Christian
+Mi 10.05, 12:07
+Eberle, Tamara;Wißmann, Fabian
+Hallo zusammen,
+anbei die Account daten
+ 
+## IP
+ 
+IP-Adresse: 213.136.77.216
+IPv6: 2a02:c207:3003:2042:0000:0000:0000:0001
+ 
+## SSH Zugang
+ 
+User: aml
+Pass: hC56A5u4B6
+ 
+## Portainer
+ 
+URL: https://213.136.77.216:9443
+Dashboard: https://213.136.77.216:9443/#!/2/docker/dashboard
+ 
+User: admin
+Pass: HHZ-DBE-aml-2023!
