@@ -8,7 +8,7 @@ docker run -d --name data_gen_running --mount type=bind,src=/home/aml/MLOps/pipe
 docker run -d --name gx_sim_data_running --mount type=bind,src=/home/aml/MLOps/pipeline,dst=/app/pipeline gx_sim_data:1
 
 # Ludwig Serve
-docker run -d --name ludwig_serve -p 8000:8000 ludwig_serve:1
+docker run -d --name ludwig_serve -p 8000:8000 --ip 172.17.0.6 ludwig_serve:1
 
 # MLFlow
-docker run -d --name mlflow --mount type=bind,src=/home/aml/MLOps/MFlow/,dst=/app/ -p 5000:5000 ghcr.io/mlflow/mlflow:v2.3.1 mlflow server -h 0.0.0.0 --backend-store-uri sqlite:///app/mlflow.db --artifacts-destination /app/mlartifacts --default-artifact-root /app/mlruns
+docker run -d --name mlflow --mount type=bind,src=/home/aml/MLOps/MLFlow/,dst=/app/ -p 5000:5000 ghcr.io/mlflow/mlflow:v2.3.1 mlflow server -h 0.0.0.0 --backend-store-uri sqlite:///app/mlflow.db --artifacts-destination /app/mlartifacts --default-artifact-root /app/mlruns

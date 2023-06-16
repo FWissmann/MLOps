@@ -2,7 +2,7 @@ schema: '2.0'
 stages:
   train:
     cmd: docker run -i --rm --name ludwig_experiment_single --mount type=bind,src=/home/aml/MLOps/pipeline,dst=/app/pipeline
-      --mount type=bind,src=/home/aml/MLOps/conf,dst=/app/conf --env MLFLOW_TRACKING_URI=http://172.17.0.6:5000/
+      --mount type=bind,src=/home/aml/MLOps/conf,dst=/app/conf --env MLFLOW_TRACKING_URI=http://172.17.0.4:5000/
       ludwig_experiment:1 experiment --config /app/conf/ludwig_conf.yaml --dataset
       /app/pipeline/01_sim_data_parquet/sim_data.parquet --output_directory /app/pipeline/02_model_results
       --mlflow --experiment_name relax --model_name generator
@@ -11,23 +11,23 @@ stages:
       md5: 4cd65ce18d8d26bdd727b4dd6f8e9ea6
       size: 343
     - path: ./pipeline/01_sim_data_parquet/sim_data.parquet
-      md5: bc662351c8edf80e7a3c5b243bcfa5b2
-      size: 23414
+      md5: c1c7941ee3e1e6637de5710ba727b77d
+      size: 23445
   data_gen:
     cmd: docker run -i --rm --name data_gen_single --mount type=bind,src=/home/aml/MLOps/pipeline,dst=/app/pipeline
       data_gen:1
     outs:
     - path: ./pipeline/00_sim_data_output/simulated_data_grade.csv
-      md5: 7232d112844be1a3bf6e599b93d8ad4c
-      size: 141781
+      md5: 148185e7aa243e554d6a7161a4e25529
+      size: 142019
   data_check:
     cmd: docker run -i --rm --name gx_sim_data_single --mount type=bind,src=/home/aml/MLOps/pipeline,dst=/app/pipeline
       gx_sim_data:1
     deps:
     - path: ./pipeline/00_sim_data_output/simulated_data_grade.csv
-      md5: 7232d112844be1a3bf6e599b93d8ad4c
-      size: 141781
+      md5: 148185e7aa243e554d6a7161a4e25529
+      size: 142019
     outs:
     - path: ./pipeline/01_sim_data_parquet/sim_data.parquet
-      md5: bc662351c8edf80e7a3c5b243bcfa5b2
-      size: 23414
+      md5: c1c7941ee3e1e6637de5710ba727b77d
+      size: 23445
