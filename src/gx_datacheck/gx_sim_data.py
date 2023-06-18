@@ -19,7 +19,7 @@ context = gx.get_context()
 # In[3]:
 
 
-validator = context.sources.pandas_default.read_csv('/app/pipeline/00_sim_data_output/simulated_data_grade.csv')
+validator = context.sources.pandas_default.read_csv('/app/data/00_sim_data_output/simulated_data_grade.csv')
 
 
 # #### Anforderungen festlegen (können beliebig viele sein)
@@ -78,7 +78,7 @@ import os
 import pandas as pd
 
 filename = 'sim_data.parquet'
-container_path = '/app/pipeline/01_sim_data_parquet'
+container_path = '/app/data/01_data_parquet'
 
 def save_file_with_version(filename, container_path, data):
 # Überprüfe, ob die Datei bereits existiert
@@ -108,7 +108,7 @@ def save_file_with_version(filename, container_path, data):
 
 if checkpoint_result["success"]:
     print("Die Expectations Spalte 'Zeit' != Null und Spalte 'Herkunft' von Datentyp string wurden erfüllt.")
-    sim_data = pd.read_csv('/app/pipeline/00_sim_data_output/simulated_data_grade.csv')
+    sim_data = pd.read_csv('/app/data/00_sim_data_output/simulated_data_grade.csv')
     save_file_with_version(filename, container_path, sim_data)
 else:
     print("Die Expectations wurden nicht erfüllt. Das Dataframe wurde nicht als Parquet-file gespeichert.")

@@ -658,7 +658,7 @@ def save_file_with_version(filename, container_path, data_frame):
     print(f'Das DataFrame wurde als CSV-Datei unter {filename} gespeichert.')
 
 filename = 'simulated_data_grade.csv'
-container_path = '/app/pipeline/00_sim_data_output'
+container_path = '/app/data/00_sim_data_output'
 
 
 save_file_with_version(filename, container_path, sim_data)
