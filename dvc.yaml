@@ -1,22 +1,22 @@
 stages:
   train:
-    cmd: docker run -i --rm --name ludwig_experiment_single --mount type=bind,src=/home/aml/MLOps/pipeline,dst=/app/pipeline
-      --mount type=bind,src=/home/aml/MLOps/conf,dst=/app/conf --env MLFLOW_TRACKING_URI=http://172.17.0.4:5000/
-      ludwig_experiment:1 experiment --config /app/conf/ludwig_conf.yaml --dataset
-      /app/pipeline/01_sim_data_parquet/sim_data.parquet --output_directory /app/pipeline/02_model_results
+    cmd: docker run -i --rm --name ludwig_experiment_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
+      --mount type=bind,src=/home/aml/MLOps/conf/ludwig_experiment,dst=/app/conf --env MLFLOW_TRACKING_URI=http://172.17.0.4:5000/
+      ludwig_experiment:2 experiment --config /app/conf/ludwig_conf.yaml --dataset
+      /app/data/01_data_parquet/sim_data.parquet --output_directory /app/data/02_model_results
       --mlflow --experiment_name relax --model_name generator
     deps:
-    - ./conf/ludwig_conf.yaml
-    - ./pipeline/01_sim_data_parquet/sim_data.parquet
+    - ./conf/ludwig_experiment/ludwig_conf.yaml
+    - ./data/01_data_parquet/sim_data.parquet
   data_gen:
-    cmd: docker run -i --rm --name data_gen_single --mount type=bind,src=/home/aml/MLOps/pipeline,dst=/app/pipeline
-      data_gen:1
+    cmd: docker run -i --rm --name data_gen_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/data_generator,dst=/app/
+      data_gen:2
     outs:
-    - ./pipeline/00_sim_data_output/simulated_data_grade.csv
+    - ./data/00_sim_data_output/simulated_data_grade.csv
   data_check:
-    cmd: docker run -i --rm --name gx_sim_data_single --mount type=bind,src=/home/aml/MLOps/pipeline,dst=/app/pipeline
-      gx_sim_data:1
+    cmd: docker run -i --rm --name gx_sim_data_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/
+      gx_sim_data:2
     deps:
-    - ./pipeline/00_sim_data_output/simulated_data_grade.csv
+    - ./data/00_sim_data_output/simulated_data_grade.csv
     outs:
-    - ./pipeline/01_sim_data_parquet/sim_data.parquet
+    - ./data/01_data_parquet/sim_data.parquet

@@ -1,5 +1,0 @@
-outs:
-- md5: 33a9ee6fad0f6792e947e421a086764a.dir
-  size: 130022
-  nfiles: 7
-  path: 01_data_parquet
