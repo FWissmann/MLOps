@@ -1,0 +1,5 @@
+outs:
+- md5: d2e4dc074626bd0ad5eff33a3982d2aa.dir
+  size: 62395
+  nfiles: 2
+  path: 02_model_results
