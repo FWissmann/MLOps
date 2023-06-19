@@ -3,8 +3,6 @@ aml@213.136.77.216
 src/ludwig_serve/
 # MLFlow
 MLFlow/mlartifacts
-MLFlow/mlruns
-MLFlow/model/
 MLFlow/mlflow.db
 # Pipeline
 pipeline/
