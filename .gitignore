@@ -9,7 +9,6 @@ MLFlow/mlflow.db
 # Pipeline
 pipeline/
 # Data
-data/00_rawdata
 data/00_sim_data_output
 data/01_data_parquet
 data/02_model_results
