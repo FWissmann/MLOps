@@ -18,17 +18,17 @@ stages:
     cmd: docker run -i --rm --name data_gen_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/src/data_generator,dst=/app/ data_gen:2
     outs:
-    - path: ./data/00_sim_data_output/simulated_data_grade.csv
-      md5: 49c1d04d1fd7313b892470fc92c4e1ad
-      size: 141972
+    - path: ./data/00_simdata/00_simdata.csv
+      md5: 6b764dc5f89fe578f1b92c54525fd142
+      size: 141931
   data_check:
-    cmd: docker run -i --rm --name gx_sim_data_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
-      --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ gx_sim_data:2
+    cmd: docker run -i --rm --name gx_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
+      --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ gx_simdata:3
     deps:
-    - path: ./data/00_sim_data_output/simulated_data_grade.csv
-      md5: 49c1d04d1fd7313b892470fc92c4e1ad
-      size: 141972
+    - path: ./data/00_simdata/00_simdata.csv
+      md5: 6b764dc5f89fe578f1b92c54525fd142
+      size: 141931
     outs:
-    - path: ./data/01_data_parquet/sim_data.parquet
-      md5: 7aa7bd47adb0c018e79479f69cab3244
-      size: 23654
+    - path: ./data/01_gx/01_gx_simdata.csv
+      md5: 6b764dc5f89fe578f1b92c54525fd142
+      size: 141931

@@ -11,14 +11,14 @@ import locale
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime
-get_ipython().run_line_magic('matplotlib', 'inline')
+#get_ipython().run_line_magic('matplotlib', 'inline')
 
 # Check if environmet variables are set otherwise use defaults
 # Input variables
 if 'GX_SIMDATA_FILENAME' in os.environ:
     GX_SIMDATA_FILENAME = os.environ['GX_SIMDATA_FILENAME']
 else:
-    GX_SIMDATA_FILENAME = '/app/01_gx/01_gx_simdata.csv'
+    GX_SIMDATA_FILENAME = '/app/data/01_gx/01_gx_simdata.csv'
 
 # Output variables
 if 'DATAPREP_SIMDATA_FILENAME' in os.environ:
@@ -127,7 +127,7 @@ grouped_data.info()
 
 
 # im Datengenerator leider englische Namen verwendet... kann auskommentiert werden:
-locale.setlocale(locale.LC_TIME, "en_US") # englische Monatsbezeichnung
+#locale.setlocale(locale.LC_TIME, "en_US") # englische Monatsbezeichnung
 'en_US"'
 
 # Anzahl der Vorkommen eines Users im ursprünglichen sim_data

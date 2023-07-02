@@ -15,14 +15,14 @@ stages:
     - ./data/00_simdata/00_simdata.csv
   data_check:
     cmd: docker run -i --rm --name gx_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/
-      gx_sim_data:3
+      gx_simdata:3
     deps:
     - ./data/00_simdata/00_simdata.csv
     outs:
     - ./data/01_gx/01_gx_simdata.csv
   data_prep:
     cmd: docker run -i --rm --name dataprep_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/dataprep,dst=/app/
-      dataprep_simdata:3
+      dataprep_simdata:4
     deps:
     - ./data/01_gx/01_gx_simdata.csv
     outs:

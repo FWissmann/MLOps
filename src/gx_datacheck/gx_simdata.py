@@ -17,7 +17,7 @@ else:
 if 'GX_SIMDATA_PATH' in os.environ:
     GX_SIMDATA_PATH = os.environ['GX_SIMDATA_PATH']
 else:
-    GX_SIMDATA_PATH = '/app/data/01_gx_simdata'
+    GX_SIMDATA_PATH = '/app/data/01_gx'
 
 context = gx.get_context()
 
@@ -78,8 +78,8 @@ checkpoint_result = checkpoint.run()
 # #### Ergebnis der Validierung ausgeben lassen 
 
 #filename = 'sim_data.parquet'
-GX_SIMDATA_FILENAME = 'sim_data.csv'
-GX_SIMDATA_PATH = '/app/data/01_data_parquet'
+#GX_SIMDATA_FILENAME = 'sim_data.csv'
+#GX_SIMDATA_PATH = '/app/data/01_data_parquet'
 
 def save_file_with_version(filename, container_path, data):
 # Überprüfe, ob die Datei bereits existiert
