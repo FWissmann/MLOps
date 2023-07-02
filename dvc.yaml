@@ -3,11 +3,11 @@ stages:
     cmd: docker run -i --rm --name ludwig_experiment_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/conf/ludwig_experiment,dst=/app/conf --env MLFLOW_TRACKING_URI=http://172.17.0.4:5000/
       ludwig_experiment:2 experiment --config /app/conf/ludwig_conf.yaml --dataset
-      /app/data/01_data_parquet/sim_data.parquet --output_directory /app/data/02_model_results
+      /app/data/02_dataprep/02_dataprep_simdata.csv --output_directory /app/data/03_model_results
       --mlflow --experiment_name relax --model_name generator
     deps:
     - ./conf/ludwig_experiment/ludwig_conf.yaml
-    - ./data/01_data_parquet/sim_data.parquet
+    - ./data/02_dataprep/02_gx_simdata.csv
   data_gen:
     cmd: docker run -i --rm --name data_gen_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/data_generator,dst=/app/
       data_gen:2
@@ -15,8 +15,8 @@ stages:
     - ./data/00_sim_data_output/simulated_data_grade.csv
   data_check:
     cmd: docker run -i --rm --name gx_sim_data_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/
-      gx_sim_data:2
+      gx_sim_data:3
     deps:
-    - ./data/00_sim_data_output/simulated_data_grade.csv
+    - ./data/00_simdata/00_simdata.csv
     outs:
-    - ./data/01_data_parquet/sim_data.parquet
+    - ./data/01_gx/01_gx_simdata.csv
