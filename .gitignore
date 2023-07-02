@@ -1,6 +1,6 @@
 aml@213.136.77.216
 # Local model for serving, needs to be changed
-src/ludwig_serve/
+src/ludwig_serve/model
 # MLFlow
 MLFlow/mlartifacts
 MLFlow/mlflow.db

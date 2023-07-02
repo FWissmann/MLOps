@@ -1,7 +1,7 @@
 [core]
     autostage = true
-    remote = default_local
-['remote "default"']
-    url = ssh://aml@213.136.77.216/dvc_storage
-['remote "default_local"']
-    url = /home/aml/dvc_storage/
+    remote = mlops
+['remote "mlops"']
+    url = ssh://aml@digital.hhz.de/mlops
+    ask_password = true
+    

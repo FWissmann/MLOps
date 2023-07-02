@@ -43,6 +43,7 @@ lsc_split = ludwig_serve_command.split()
 # Get current run name
 print(f'{gctm()}Main thread: Getting current run name ...')
 response_json_model = (requests.get(url + "registered-models/get-latest-versions?name=Generator&stages=Production")).json()
+print(f'{gctm()}Main thread: Current run name: {response_json_model["model_versions"][0]["source"]}')
 current_run = response_json_model["model_versions"][0]["source"]
 
 # Download model
