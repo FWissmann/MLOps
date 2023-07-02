@@ -7,7 +7,8 @@ MLFlow/mlflow.db
 # Pipeline
 pipeline/
 # Data
-data/00_sim_data_output
-data/01_data_parquet
-data/02_model_results
+data/00_simdata
+data/01_gx
+data/02_dataprep
+data/03_model_results
 

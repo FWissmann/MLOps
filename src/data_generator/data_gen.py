@@ -1,16 +1,26 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
+# Imports
 import pandas as pd
 import numpy as np
-#import matplotlib.pyplot as plt
-#import seaborn as sns
-#get_ipython().run_line_magic('matplotlib', 'inline')
+import os
+import subprocess
+import random
+import string
+from datetime import datetime, timedelta
 
+# Variablen
 
-# In[30]:
+# Check if environment variable is set otherwise use default value
+if 'SIMDATA_FILENAME' in os.environ:
+    filename = os.environ['SIMDATA_FILENAME']
+else:
+    filename = '00_simdata.csv'
+if 'SIMDATA_FOLDERNAME' in os.environ:
+    container_path = os.environ['SIMDATA_FOLDERNAME']
+else:
+    container_path = '/app/data/00_simdata'
 
 
 columns =  ['Zeit', 'Vollständiger Name', 'Betroffene/r Nutzer/in', 'Ereigniskontext', 'Komponente', 'Ereignisname', 'Beschreibung', 'Herkunft', 'IP-Adresse']
@@ -21,16 +31,6 @@ sim_data.head()
 # ### Festlegung: Anzahl von Zeilen: Testdatei ca. 800 Zeilen > 1000 Zeilen generieren 
 
 # ## 1) Zeit und Datum: Format 18. April 2023, 14:24:03
-
-# In[31]:
-
-
-import random
-from datetime import datetime, timedelta
-
-
-# In[37]:
-
 
 anzahl_zeilen = 1000
 start = datetime(2023, 4, 1)
@@ -88,10 +88,6 @@ sim_data.head(1000)
 # ## 2) Vollständiger Name: alphanumerische Zeichenkette
 
 # In[61]:
-
-
-import string
-
 
 # In[62]:
 
@@ -628,10 +624,6 @@ filtered_datei = sim_data[sim_data['Komponente'] == 'Datei']
 
 # In[230]:
 
-
-import os
-import pandas as pd
-
 def save_file_with_version(filename, container_path, data_frame):
 # Überprüfe, ob die Datei bereits existiert
     if os.path.exists(os.path.join(container_path, filename)):
@@ -657,21 +649,13 @@ def save_file_with_version(filename, container_path, data_frame):
     data_frame.to_csv(new_filepath, index=False)
     print(f'Das DataFrame wurde als CSV-Datei unter {filename} gespeichert.')
 
-filename = 'simulated_data_grade.csv'
-container_path = '/app/data/00_sim_data_output'
-
-
 save_file_with_version(filename, container_path, sim_data)
 
-
 #sim_data.to_csv('/home/jovyan/00_sim_data_output/simulated_data_grade.csv', index=False)
-
-
 print("Ausschnitt der simulierten Daten:")
 print(sim_data.head())
 
 #fkt. nicht - modul 'container' fehlt...
-import subprocess
 
 def copy_file_to_host(src_path, dest_path):
     command = f"docker cp {src_path} data_generator:{dest_path}"

@@ -28,7 +28,7 @@ else:
 print(f'{gctm()}Main thread: Setting URLs ...')
 # The REST API endpoint
 if run_in_docker:
-    url = 'http://172.17.0.6:8000/batch_predict'
+    url = 'http://172.17.0.5:8000/batch_predict'
 else:
     url = "http://213.136.77.216:8000/batch_predict"
 

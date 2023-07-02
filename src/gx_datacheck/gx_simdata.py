@@ -1,17 +1,21 @@
 import great_expectations as gx
 import pandas as pd
 import numpy as np
-#import matplotlib.pyplot as plt
-#import seaborn as sns
-#%matplotlib inline
+import os
 
-
-# ### 1) Test - vertraut machen mit gx; Expectations manuell programmieren
-
-# #### DataContext erstellen
-
-# In[2]:
-
+# Check if environment variable is set otherwise set it to default
+if 'SIMDATA_FILENAME' in os.environ:
+    path = os.environ['SIMDATA_FILENAME']
+else:    
+    path = '/app/data/00_simdata/00_simdata.csv'
+if 'GX_SIMDATA_FILENAME' in os.environ:
+    filename = os.environ['GX_SIMDATA_FILENAME']
+else:
+    filename = '01_gx_simdata.csv'
+if 'GX_SIMDATA_PATH' in os.environ:
+    container_path = os.environ['GX_SIMDATA_PATH']
+else:
+    container_path = '/app/data/01_gx_simdata'
 
 context = gx.get_context()
 
@@ -19,7 +23,7 @@ context = gx.get_context()
 # In[3]:
 
 
-validator = context.sources.pandas_default.read_csv('/app/data/00_sim_data_output/simulated_data_grade.csv')
+validator = context.sources.pandas_default.read_csv(path)
 
 
 # #### Anforderungen festlegen (können beliebig viele sein)
@@ -71,13 +75,8 @@ checkpoint_result = checkpoint.run()
 
 # #### Ergebnis der Validierung ausgeben lassen 
 
-# In[12]:
-
-
-import os
-import pandas as pd
-
-filename = 'sim_data.parquet'
+#filename = 'sim_data.parquet'
+filename = 'sim_data.csv'
 container_path = '/app/data/01_data_parquet'
 
 def save_file_with_version(filename, container_path, data):
@@ -102,13 +101,14 @@ def save_file_with_version(filename, container_path, data):
 
     # Speichere das DataFrame als CSV-Datei unter dem ursprünglichen Dateinamen
     new_filepath = os.path.join(container_path, filename)
-    data.to_parquet(new_filepath, index=False)
+    #data.to_parquet(new_filepath, index=False)
+    data.to_csv(new_filepath, index=False)
     print(f'Die CSV  wurde als Parquet-Datei unter {filename} gespeichert.')
 
 
 if checkpoint_result["success"]:
     print("Die Expectations Spalte 'Zeit' != Null und Spalte 'Herkunft' von Datentyp string wurden erfüllt.")
-    sim_data = pd.read_csv('/app/data/00_sim_data_output/simulated_data_grade.csv')
+    sim_data = pd.read_csv(path)
     save_file_with_version(filename, container_path, sim_data)
 else:
     print("Die Expectations wurden nicht erfüllt. Das Dataframe wurde nicht als Parquet-file gespeichert.")
