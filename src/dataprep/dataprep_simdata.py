@@ -6,16 +6,35 @@
 
 import pandas as pd
 import numpy as np
+import os
+import locale
 import matplotlib.pyplot as plt
 import seaborn as sns
+from datetime import datetime
 get_ipython().run_line_magic('matplotlib', 'inline')
 
+# Check if environmet variables are set otherwise use defaults
+# Input variables
+if 'GX_SIMDATA_FILENAME' in os.environ:
+    GX_SIMDATA_FILENAME = os.environ['GX_SIMDATA_FILENAME']
+else:
+    GX_SIMDATA_FILENAME = '/app/01_gx/01_gx_simdata.csv'
+
+# Output variables
+if 'DATAPREP_SIMDATA_FILENAME' in os.environ:
+    DATAPREP_SIMDATA_FILENAME = os.environ['DATAPREP_SIMDATA_FILENAME']
+else:
+    DATAPREP_SIMDATA_FILENAME = '02_dataprep_simdata.csv'
+if 'DATAPREP_SIMDATA_PATH' in os.environ:
+    DATAPREP_SIMDATA_PATH = os.environ['DATAPREP_SIMDATA_PATH']
+else:
+    DATAPREP_SIMDATA_PATH = '/app/data/02_dataprep_simdata'
 
 # In[2]:
 
 
 # erstes CSV einlesen mit den Log-Daten
-sim_data = pd.read_csv('simulated_data_grade.csv')
+sim_data = pd.read_csv(GX_SIMDATA_FILENAME)
 
 # zweites CSV einlesen mit den Abschlussnoten
 #grade_data = pd.read_csv('')
@@ -107,9 +126,6 @@ grouped_data.info()
 # In[9]:
 
 
-from datetime import datetime
-import locale
-
 # im Datengenerator leider englische Namen verwendet... kann auskommentiert werden:
 locale.setlocale(locale.LC_TIME, "en_US") # englische Monatsbezeichnung
 'en_US"'
@@ -195,6 +211,6 @@ grouped_data_grade.head()
 
 # In[12]:
 
-
-grouped_data_sim.to_csv('grouped_data_sim_grade.csv', index=False)
+filename = DATAPREP_SIMDATA_PATH + '/' + DATAPREP_SIMDATA_FILENAME
+grouped_data_sim.to_csv(filename, index=False)
 

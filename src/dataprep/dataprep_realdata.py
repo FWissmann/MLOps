@@ -11,28 +11,41 @@ import seaborn as sns
 get_ipython().run_line_magic('matplotlib', 'inline')
 
 
-# Not finished!!!
 # Check if environmet variables are set otherwise use defaults
-if 'GX_REALDATA_FILENAME' in os.environ:
-    path_log = os.environ['GX_REALDATA_FILENAME']
+# Input variables
+if 'GX_REALDATA_FILENAME_LOG' in os.environ:
+    GX_REALDATA_FILENAME_LOG = os.environ['GX_REALDATA_FILENAME']
 else:
-    path_log = '/app/01_gx/01_gx_REALDATA.csv'
+    GX_REALDATA_FILENAME_LOG = '/app/01_gx/01_gx_REALDATA_logs.csv'
+if 'GX_REALDATA_FILENAME_GRADES' in os.environ:
+    GX_REALDATA_FILENAME_GRADES = os.environ['GX_REALDATA_FILENAME']
+else:
+    GX_REALDATA_FILENAME_GRADES = '/app/01_gx/01_gx_REALDATA_logs.csv'
 
+# Output variables
 if 'DATAPREP_REALDATA_FILENAME' in os.environ:
-    filename = os.environ['DATAPREP_REALDATA_FILENAME']
+    DATAPREP_REALDATA_FILENAME = os.environ['DATAPREP_REALDATA_FILENAME']
 else:
-    filename = '02_dataprep_REALDATA.csv'
-if 'DATAPREP_REALDATA_PATH' in os.environ:
-    container_path = os.environ['DATAPREP_REALDATA_PATH']
+    DATAPREP_REALDATA_FILENAME = '02_dataprep_REALDATA.csv'
+if 'DATAPREP_REALDATA_FOLDERNAME' in os.environ:
+    DATAPREP_REALDATA_FOLDERNAME = os.environ['DATAPREP_REALDATA_PATH']
 else:
-    container_path = '/app/data/02_dataprep_REALDATA'
+    DATAPREP_REALDATA_FOLDERNAME = '/app/data/02_dataprep_REALDATA'
 
+if 'DATAPREP_REALDATA_FILENAME_LOG' in os.environ:
+    DATAPREP_REALDATA_FILENAME_LOG = os.environ['DATAPREP_REALDATA_FILENAME']
+else:  
+    DATAPREP_REALDATA_FILENAME_LOG = '02_dataprep_REALDATA_logs.csv'
+if 'DATAPREP_REALDATA_FOLDERNAME_LOG' in os.environ:
+    DATAPREP_REALDATA_FOLDERNAME_LOG = os.environ['DATAPREP_REALDATA_PATH']
+else:
+    DATAPREP_REALDATA_FOLDERNAME_LOG = '/app/data/02_dataprep_REALDATA'
 
 # erstes CSV einlesen mit den Log-Daten
-log_data = pd.read_csv('RTWIBNet_W22_log.csv')
+log_data = pd.read_csv('GX_REALDATA_FILENAME_LOG')
 
 # zweites CSV einlesen mit den Abschlussnoten
-grade_data = pd.read_csv('RTWIBNet_W22_grades.csv')
+grade_data = pd.read_csv('GX_REALDATA_FILENAME_GRADES')
 
 log_data.head()
 #grade_data.head()
@@ -186,22 +199,57 @@ grade_data
 # In[11]:
 
 
-# Bewertung / 100 ergibt die Schulnote
-grade_data['bewertung'] = grade_data['bewertung']/100
+def check_grades(grade_csv):
+    if grade_csv['bewertung'].isnull().any():
+        # Wenn die Spalte 'bewertung' leer ist > Produktionsdaten, keine Trainingsdaten
+        
+        # gleich als CSV file abspeichern
+        filename = DATAPREP_REALDATA_FOLDERNAME_LOG + '/' + DATAPREP_REALDATA_FILENAME_LOG
+        grouped_data_log.to_csv(filename, index=False)
+        return grouped_data_log.head()
+    
+    
+    else:
+        # ansonsten Spalte mit den Noten anpassen:
+        # Bewertung / 100 ergibt die Schulnote
+        grade_csv['bewertung'] = grade_csv['bewertung']/100
+        
+        # Wenn es zu dem User keine Bewertung gibt - ersetzte NaN mit 5.0
+        grade_csv['bewertung'] = grade_csv['bewertung'].fillna(5.0)
+        
+        # Abschlussnote aus dem zweiten df grade_data_log dem jeweiligen User zuordnen
+        grouped_data_grade = pd.merge(grouped_data_log, grade_csv, on='Vollständiger Name', how='left')
+        
+        # Als CSV-file abspeichern
+        filename = DATAPREP_REALDATA_FILENAME + '/' + DATAPREP_REALDATA_FILENAME
+        grouped_data_grade.to_csv(filename, index=False)
+        
+        return grouped_data_grade.head()
 
 
 # In[12]:
 
 
-# Abschlussnote aus dem zweiten df grade_data_log dem jeweiligen User zuordnen
-
-grouped_data_grade = pd.merge(grouped_data_log, grade_data, on='Vollständiger Name', how='left')
-
-grouped_data_grade.head()
+check_grades(grade_data)
 
 
 # In[13]:
 
 
-grouped_data_grade.to_csv('grouped_data_grade.csv', index=False)
+# In Methode integriert
+# Wenn es zu dem User keine Bewertung gibt - ersetzte NaN mit 5.0
+# grade_data['bewertung'] = grade_data['bewertung'].fillna(5.0)
+# grade_data
+
+
+# In[14]:
+
+
+# In Methode integriert
+
+# Abschlussnote aus dem zweiten df grade_data_log dem jeweiligen User zuordnen
+
+# grouped_data_grade = pd.merge(grouped_data_log, grade_data, on='Vollständiger Name', how='left')
+
+# grouped_data_grade.head()
 

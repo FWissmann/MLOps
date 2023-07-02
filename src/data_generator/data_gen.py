@@ -13,14 +13,15 @@ from datetime import datetime, timedelta
 # Variablen
 
 # Check if environment variable is set otherwise use default value
+# Output variables
 if 'SIMDATA_FILENAME' in os.environ:
-    filename = os.environ['SIMDATA_FILENAME']
+    SIMDATA_FILENAME = os.environ['SIMDATA_FILENAME']
 else:
-    filename = '00_simdata.csv'
+    SIMDATA_FILENAME = '00_simdata.csv'
 if 'SIMDATA_FOLDERNAME' in os.environ:
-    container_path = os.environ['SIMDATA_FOLDERNAME']
+    SIMDATA_FOLDERNAME = os.environ['SIMDATA_FOLDERNAME']
 else:
-    container_path = '/app/data/00_simdata'
+    SIMDATA_FOLDERNAME = '/app/data/00_simdata'
 
 
 columns =  ['Zeit', 'Vollständiger Name', 'Betroffene/r Nutzer/in', 'Ereigniskontext', 'Komponente', 'Ereignisname', 'Beschreibung', 'Herkunft', 'IP-Adresse']
@@ -649,7 +650,7 @@ def save_file_with_version(filename, container_path, data_frame):
     data_frame.to_csv(new_filepath, index=False)
     print(f'Das DataFrame wurde als CSV-Datei unter {filename} gespeichert.')
 
-save_file_with_version(filename, container_path, sim_data)
+save_file_with_version(SIMDATA_FILENAME, SIMDATA_FOLDERNAME, sim_data)
 
 #sim_data.to_csv('/home/jovyan/00_sim_data_output/simulated_data_grade.csv', index=False)
 print("Ausschnitt der simulierten Daten:")

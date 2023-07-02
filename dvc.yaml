@@ -12,11 +12,18 @@ stages:
     cmd: docker run -i --rm --name data_gen_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/data_generator,dst=/app/
       data_gen:2
     outs:
-    - ./data/00_sim_data_output/simulated_data_grade.csv
+    - ./data/00_simdata/00_simdata.csv
   data_check:
-    cmd: docker run -i --rm --name gx_sim_data_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/
+    cmd: docker run -i --rm --name gx_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/
       gx_sim_data:3
     deps:
     - ./data/00_simdata/00_simdata.csv
     outs:
     - ./data/01_gx/01_gx_simdata.csv
+  data_prep:
+    cmd: docker run -i --rm --name dataprep_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/dataprep,dst=/app/
+      dataprep_simdata:3
+    deps:
+    - ./data/01_gx/01_gx_simdata.csv
+    outs:
+    - ./data/02_dataprep/02_dataprep_simdata.csv
