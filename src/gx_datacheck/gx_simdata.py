@@ -72,7 +72,7 @@ def save_file_with_version(filename, container_path, data):
 
     # Speichere das DataFrame als CSV-Datei unter dem ursprünglichen Dateinamen
     new_filepath = os.path.join(container_path, filename)
-    data.to_parquet(new_filepath, index=False)
+    data.to_csv(new_filepath, index=False)
     #data.to_csv(new_filepath, index=False)
     print(f'Die CSV  wurde unter {filename} als CSV Datei gespeichert.')
 

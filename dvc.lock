@@ -19,16 +19,16 @@ stages:
       --mount type=bind,src=/home/aml/MLOps/src/data_generator,dst=/app/ data_gen:2
     outs:
     - path: ./data/00_simdata/00_simdata.csv
-      md5: 6b764dc5f89fe578f1b92c54525fd142
-      size: 141931
+      md5: 681dcc430e857b0dc161b7add2891717
+      size: 142284
   data_check:
     cmd: docker run -i --rm --name gx_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ gx_simdata:3
     deps:
     - path: ./data/00_simdata/00_simdata.csv
-      md5: 6b764dc5f89fe578f1b92c54525fd142
-      size: 141931
+      md5: 681dcc430e857b0dc161b7add2891717
+      size: 142284
     outs:
     - path: ./data/01_gx/01_gx_simdata.csv
-      md5: 6b764dc5f89fe578f1b92c54525fd142
-      size: 141931
+      md5: 97f262912b37772fc513271f116c2904
+      size: 23714
