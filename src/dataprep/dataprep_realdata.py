@@ -8,19 +8,17 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 import seaborn as sns
-get_ipython().run_line_magic('matplotlib', 'inline')
-
 
 # Check if environmet variables are set otherwise use defaults
 # Input variables
 if 'GX_REALDATA_FILENAME_LOG' in os.environ:
-    GX_REALDATA_FILENAME_LOG = os.environ['GX_REALDATA_FILENAME']
+    GX_REALDATA_FILENAME_LOG = os.environ['GX_REALDATA_FILENAME_LOG']
 else:
     GX_REALDATA_FILENAME_LOG = '/app/01_gx/01_gx_REALDATA_logs.csv'
 if 'GX_REALDATA_FILENAME_GRADES' in os.environ:
-    GX_REALDATA_FILENAME_GRADES = os.environ['GX_REALDATA_FILENAME']
+    GX_REALDATA_FILENAME_GRADES = os.environ['GX_REALDATA_FILENAME_GRADES']
 else:
-    GX_REALDATA_FILENAME_GRADES = '/app/01_gx/01_gx_REALDATA_logs.csv'
+    GX_REALDATA_FILENAME_GRADES = '/app/01_gx/01_gx_REALDATA_grades.csv'
 
 # Output variables
 if 'DATAPREP_REALDATA_FILENAME' in os.environ:
@@ -50,15 +48,7 @@ grade_data = pd.read_csv('GX_REALDATA_FILENAME_GRADES')
 log_data.head()
 #grade_data.head()
 
-
-# In[3]:
-
-
 log_data.info()
-
-
-# In[4]:
-
 
 # eindeutige Werte der Spalten 'Voll.Name', 'Komponente', 'Herkunft' von sim_data als array ausgeben 
 
@@ -200,7 +190,7 @@ grade_data
 
 
 def check_grades(grade_csv):
-    if grade_csv['bewertung'].isnull().any():
+    if grade_csv['bewertung'].isnull().all():
         # Wenn die Spalte 'bewertung' leer ist > Produktionsdaten, keine Trainingsdaten
         
         # gleich als CSV file abspeichern

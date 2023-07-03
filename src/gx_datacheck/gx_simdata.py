@@ -21,40 +21,25 @@ else:
 
 context = gx.get_context()
 
-
-# In[3]:
-
-
 validator = context.sources.pandas_default.read_csv(SIMDATA_FILENAME)
 
-
 # #### Anforderungen festlegen (können beliebig viele sein)
-
-# In[14]:
-
 
 # über den Befehl 'great_expectations suite list' im  kann überprüft werden, welche Expectations 
 # für eine Datei definiert worden sind - die list muss aber vorab erst erstellt werden (Sammlung)
 
-
-# In[4]:
-
-
-# Anforderung 1: die Spalte 'Zeit' soll nie gleich Null sein
+# Anforderung 1: keine Nullwerte
 validator.expect_column_values_to_not_be_null('Zeit')
-
-
-# In[5]:
-
+validator.expect_column_values_to_not_be_null('Vollständiger Name')
+validator.expect_column_values_to_not_be_null('Komponente')
+validator.expect_column_values_to_not_be_null('Herkunft')
+validator.expect_column_values_to_not_be_null('IP-Adresse')
 
 # Anforderung 2: Spalte 'Herkunft' soll vom Datentyp string sein
-validator.expect_column_values_to_be_of_type('Herkunft', type_= 'str')
-
+# > rausgenommen! Soll für datacheck 1 und datacheck 2 identischer Code sein
+#validator.expect_column_values_to_be_of_type('Herkunft', type_= 'str')
 
 # #### Daten auf Basis der Anforderungen validieren 
-
-# In[6]:
-
 
 checkpoint = gx.checkpoint.SimpleCheckpoint(
     name="checkpoint",
@@ -62,25 +47,9 @@ checkpoint = gx.checkpoint.SimpleCheckpoint(
     validator=validator,
 )
 
-
-# In[7]:
-
-
 checkpoint_result = checkpoint.run()
 
-
-# In[42]:
-
-
-# Alternative Programmierung: result = validator.validate()
-
-
 # #### Ergebnis der Validierung ausgeben lassen 
-
-#filename = 'sim_data.parquet'
-#GX_SIMDATA_FILENAME = 'sim_data.csv'
-#GX_SIMDATA_PATH = '/app/data/01_data_parquet'
-
 def save_file_with_version(filename, container_path, data):
 # Überprüfe, ob die Datei bereits existiert
     if os.path.exists(os.path.join(container_path, filename)):
@@ -103,17 +72,16 @@ def save_file_with_version(filename, container_path, data):
 
     # Speichere das DataFrame als CSV-Datei unter dem ursprünglichen Dateinamen
     new_filepath = os.path.join(container_path, filename)
-    #data.to_parquet(new_filepath, index=False)
-    data.to_csv(new_filepath, index=False)
-    print(f'Die CSV  wurde als Parquet-Datei unter {filename} gespeichert.')
-
+    data.to_parquet(new_filepath, index=False)
+    #data.to_csv(new_filepath, index=False)
+    print(f'Die CSV  wurde unter {filename} als CSV Datei gespeichert.')
 
 if checkpoint_result["success"]:
-    print("Die Expectations Spalte 'Zeit' != Null und Spalte 'Herkunft' von Datentyp string wurden erfüllt.")
+    print("Die Expectations wurden erfüllt. Die relevanten Spalten 'Zeit', 'Vollständiger Name', 'Komponente', 'Herkunft', und 'IP-Adresse' enthalten keine Nullwerte.")
     sim_data = pd.read_csv(SIMDATA_FILENAME)
     save_file_with_version(GX_SIMDATA_FILENAME, GX_SIMDATA_PATH, sim_data)
 else:
-    print("Die Expectations wurden nicht erfüllt. Das Dataframe wurde nicht als Parquet-file gespeichert.")
+    print("Die Expectations wurden nicht erfüllt.")
 
 # ### Liste an möglichen Anforderungen, die definiert werden können:
 # 
