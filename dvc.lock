@@ -34,19 +34,21 @@ stages:
       size: 141938
   data_check_real:
     cmd: docker run -i --rm --name gx_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
-      --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ gx_realdata:3
+      --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ --env REALDATA_LOG_FILENAME=/app/data/00_rawdata/RTWIBSE_W22/RTWIBSE_W22_log.csv
+      --env REALDATA_GRADE_FILENAME=/app/data/00_rawdata/RTWIBSE_W22/RTWIBSE_W22_grades.csv
+      gx_realdata:3
     deps:
-    - path: ./data/00_rawdata/RTWIBNet_W22
-      md5: 8e70822f2d3bb8ced16190952a022bde.dir
-      size: 1727714
+    - path: ./data/00_rawdata/RTWIBSE_W22
+      md5: 1762eeb756acde0c2ca017dbf54e73ca.dir
+      size: 1479271
       nfiles: 2
     - path: ./src/gx_datacheck/gx_realdata.py
-      md5: 50a4f76e43ac6388c5532b7c0b71275a
-      size: 5058
+      md5: d1f46e2138a5331535d9c440556924aa
+      size: 5471
     outs:
     - path: ./data/01_gx/01_gx_realdata_grades.csv
-      md5: 34bc004d17bcdbb9a600af7d83689917
-      size: 680
+      md5: e8fe422073abf9454a217c48022abe6f
+      size: 530
     - path: ./data/01_gx/01_gx_realdata_logs.csv
-      md5: a386c420b0c214e64a1f76fd3b6f6d62
-      size: 1727034
+      md5: 8bf129c757e731bde0258341a20e60c2
+      size: 1478741

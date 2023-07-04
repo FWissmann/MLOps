@@ -131,6 +131,7 @@ period_boundaries = []
 # Zeitraumsgrenzen aufgefüllt
 
 current_date = start_date
+# Error-Handling
 current_date = pd.Timestamp(current_date)
 while current_date <= end_date:
     period_boundaries.append(current_date)
@@ -143,6 +144,7 @@ log_counts['Anzahl_log_all'] = user_counts.reindex(log_counts['Vollständiger Na
 
 # Überprüfung des letzten Datums in sim_data
 last_date = log_data['Zeit'].max()
+# Error-Handling
 last_date = pd.Timestamp(last_date)
 
 # Auffüllen der fehlenden Zeiträume basierend auf dem letzten Datum
@@ -156,6 +158,8 @@ for i in range(len(period_boundaries)):
         
         if last_date >= period_end:
             # Datum liegt im Zeitraum, Log-Einträge zählen
+            
+            # Error-Handling
             period_start_date = period_start.date()
             period_end_date = period_end.date()
             log_entries_by_period = log_data[(log_data['Zeit'] >= period_start_date) & (log_data['Zeit'] < period_end_date)].groupby('Vollständiger Name').count()

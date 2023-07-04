@@ -160,6 +160,7 @@ period_boundaries = []
 # Zeitraumsgrenzen aufgefüllt
 
 current_date = start_date
+# Error-Handling
 current_date = pd.Timestamp(current_date)
 while current_date <= end_date:
     period_boundaries.append(current_date)
@@ -181,7 +182,7 @@ for i in range(len(period_boundaries)):
         log_counts[f'Anzahl_log_f{i+1}'] = np.mean(log_counts[[f'Anzahl_log_f{j}' for j in range(1, i+1)]], axis=1).astype(int)
     else:
         period_end = period_boundaries[i + 1]
-        
+        # Error-Handling
         period_start_date = period_start.date()
         period_end_date = period_end.date()
         if last_date >= period_end_date:

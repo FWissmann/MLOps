@@ -1,3 +1,5 @@
+vars:
+  - realdata: RTWIBSE_W22
 stages:
   train:
     cmd: docker run -i --rm --name ludwig_experiment_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
@@ -11,6 +13,8 @@ stages:
   data_gen:
     cmd: docker run -i --rm --name data_gen_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/data_generator,dst=/app/
       data_gen:2
+    deps:
+    - ./src/data_generator/data_gen.py
     outs:
     - ./data/00_simdata/00_simdata.csv
   data_check:
@@ -18,18 +22,20 @@ stages:
       gx_simdata:3
     deps:
     - ./data/00_simdata/00_simdata.csv
+    - ./src/gx_datacheck/gx_simdata.py
     outs:
     - ./data/01_gx/01_gx_simdata.csv
   data_prep:
     cmd: docker run -i --rm --name dataprep_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/dataprep,dst=/app/ dataprep_simdata:4
     deps:
     - ./data/01_gx/01_gx_simdata.csv
+    - ./src/dataprep/dataprep_simdata.py
     outs:
     - ./data/02_dataprep/02_dataprep_simdata.csv
   data_check_real:
-    cmd: docker run -i --rm --name gx_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ gx_realdata:3
+    cmd: docker run -i --rm --name gx_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ --env REALDATA_LOG_FILENAME=/app/data/00_rawdata/${realdata}/${realdata}_log.csv --env REALDATA_GRADE_FILENAME=/app/data/00_rawdata/${realdata}/${realdata}_grades.csv gx_realdata:3
     deps:
-    - ./data/00_rawdata/RTWIBNet_W22
+    - ./data/00_rawdata/${realdata}
     - ./src/gx_datacheck/gx_realdata.py
     outs:
     - ./data/01_gx/01_gx_realdata_grades.csv
@@ -43,8 +49,7 @@ stages:
     outs:
     - ./data/02_dataprep/02_dataprep_realdatadata.csv
   data_prep_gx_real:
-    cmd: docker run -i --rm --name dataprep_gx_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/
-      dataprep_gx_realdata:3
+    cmd: docker run -i --rm --name dataprep_gx_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_dataprep,dst=/app/ dataprep_gx_realdata:3
     deps:
     - ./data/02_dataprep/02_dataprep_realdatadata.csv
     - ./src/dataprep_gx/gx_realdata_grouped.py

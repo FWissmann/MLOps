@@ -127,15 +127,8 @@ def save_file_with_version(filename, container_path, data):
     data.to_csv(new_filepath, index=False)
     print(f'Die CSV  wurde unter {filename} gespeichert.')
     
-    # Speichere das Grade-DataFrame als CSV-Datei unter dem ursprünglichen Dateinamen
-    new_filepath = os.path.join(container_path, filename)
-    #data.to_parquet(new_filepath, index=False)
-    data.to_csv(new_filepath, index=False)
-    print(f'Die CSV  wurde unter {filename} gespeichert.')
-
-
 if checkpoint_result_log["success"]:
-    print("Die Expectations für die Logdatei wurden erfüllt. Die Spalte 'Vollständiger Name' enth�lt keine Nullwerte")
+    print("Die Expectations für die Logdatei wurden erfüllt. Die Spalte 'Vollständiger Name' enthält keine Nullwerte")
     log_data = pd.read_csv(REALDATA_LOG_FILENAME)
     save_file_with_version(GX_REALDATA_LOG_FILENAME, GX_REALDATA_LOG_PATH, log_data)
 else:
