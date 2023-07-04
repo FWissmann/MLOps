@@ -13,7 +13,7 @@ else:
 if 'DATAPREP_GX_REALDATA_FILENAME' in os.environ:
     DATAPREP_GX_REALDATA_FILENAME = os.environ['DATAPREP_GX_REALDATA_FILENAME']
 else:
-    DATAPREP_GX_REALDATA_FILENAME = '03_dataprep_gx_realdata.csv'
+    DATAPREP_GX_REALDATA_FILENAME = '03_dataprep_gx_realdata.parquet'
 if 'DATAPREP_GX_REALDATA_PATH' in os.environ:
     DATAPREP_GX_REALDATA_PATH = os.environ['DATAPREP_GX_REALDATA_PATH']
 else:

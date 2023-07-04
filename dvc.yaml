@@ -7,7 +7,7 @@ stages:
       --mlflow --experiment_name relax --model_name generator
     deps:
     - ./conf/ludwig_experiment/ludwig_conf.yaml
-    - ./data/02_dataprep/02_gx_simdata.csv
+    - ./data/02_dataprep/02_dataprep_simdata.csv
   data_gen:
     cmd: docker run -i --rm --name data_gen_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/data_generator,dst=/app/
       data_gen:2
@@ -21,9 +21,41 @@ stages:
     outs:
     - ./data/01_gx/01_gx_simdata.csv
   data_prep:
-    cmd: docker run -i --rm --name dataprep_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/dataprep,dst=/app/
-      dataprep_simdata:4
+    cmd: docker run -i --rm --name dataprep_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/dataprep,dst=/app/ dataprep_simdata:4
     deps:
     - ./data/01_gx/01_gx_simdata.csv
     outs:
     - ./data/02_dataprep/02_dataprep_simdata.csv
+  data_check_real:
+    cmd: docker run -i --rm --name gx_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ gx_realdata:3
+    deps:
+    - ./data/00_rawdata/RTWIBNet_W22
+    - ./src/gx_datacheck/gx_realdata.py
+    outs:
+    - ./data/01_gx/01_gx_realdata_grades.csv
+    - ./data/01_gx/01_gx_realdata_logs.csv
+  data_prep_real:
+    cmd: docker run -i --rm --name dataprep_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/dataprep,dst=/app/ dataprep_realdata:3
+    deps:
+    - ./data/01_gx/01_gx_realdata_grades.csv
+    - ./data/01_gx/01_gx_realdata_logs.csv
+    - ./src/dataprep/dataprep_realdata.py
+    outs:
+    - ./data/02_dataprep/02_dataprep_realdatadata.csv
+  data_prep_gx_real:
+    cmd: docker run -i --rm --name dataprep_gx_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/
+      dataprep_gx_realdata:3
+    deps:
+    - ./data/02_dataprep/02_dataprep_realdatadata.csv
+    - ./src/dataprep_gx/gx_realdata_grouped.py
+    outs:
+    - ./data/01_gx/03_dataprep_gx/03_dataprep_gx_realdata.parquet
+  train_real:
+    cmd: docker run -i --rm --name ludwig_experiment_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
+      --mount type=bind,src=/home/aml/MLOps/conf/ludwig_experiment,dst=/app/conf --env MLFLOW_TRACKING_URI=http://172.17.0.4:5000/
+      ludwig_experiment:2 experiment --config /app/conf/ludwig_conf.yaml --dataset
+      /app/data/03_dataprep_gx/03_dataprep_gx_realdata.csv --output_directory /app/data/03_model_results
+      --mlflow --experiment_name relax_real --model_name real
+    deps:
+    - ./conf/ludwig_experiment/ludwig_conf.yaml
+    - ./data/01_gx/03_dataprep_gx/03_dataprep_gx_realdata.parquet
