@@ -14,36 +14,36 @@ import seaborn as sns
 if 'GX_REALDATA_FILENAME_LOG' in os.environ:
     GX_REALDATA_FILENAME_LOG = os.environ['GX_REALDATA_FILENAME_LOG']
 else:
-    GX_REALDATA_FILENAME_LOG = '/app/01_gx/01_gx_REALDATA_logs.csv'
+    GX_REALDATA_FILENAME_LOG = '/app/data/01_gx/01_gx_realdata_logs.csv'
 if 'GX_REALDATA_FILENAME_GRADES' in os.environ:
     GX_REALDATA_FILENAME_GRADES = os.environ['GX_REALDATA_FILENAME_GRADES']
 else:
-    GX_REALDATA_FILENAME_GRADES = '/app/01_gx/01_gx_REALDATA_grades.csv'
+    GX_REALDATA_FILENAME_GRADES = '/app/data/01_gx/01_gx_realdata_grades.csv'
 
 # Output variables
 if 'DATAPREP_REALDATA_FILENAME' in os.environ:
     DATAPREP_REALDATA_FILENAME = os.environ['DATAPREP_REALDATA_FILENAME']
 else:
-    DATAPREP_REALDATA_FILENAME = '02_dataprep_REALDATA.csv'
+    DATAPREP_REALDATA_FILENAME = '02_dataprep_realdata.csv'
 if 'DATAPREP_REALDATA_FOLDERNAME' in os.environ:
     DATAPREP_REALDATA_FOLDERNAME = os.environ['DATAPREP_REALDATA_PATH']
 else:
-    DATAPREP_REALDATA_FOLDERNAME = '/app/data/02_dataprep_REALDATA'
+    DATAPREP_REALDATA_FOLDERNAME = '/app/data/02_dataprep_realdata'
 
 if 'DATAPREP_REALDATA_FILENAME_LOG' in os.environ:
     DATAPREP_REALDATA_FILENAME_LOG = os.environ['DATAPREP_REALDATA_FILENAME']
 else:  
-    DATAPREP_REALDATA_FILENAME_LOG = '02_dataprep_REALDATA_logs.csv'
+    DATAPREP_REALDATA_FILENAME_LOG = '02_dataprep_realdata_logs.csv'
 if 'DATAPREP_REALDATA_FOLDERNAME_LOG' in os.environ:
     DATAPREP_REALDATA_FOLDERNAME_LOG = os.environ['DATAPREP_REALDATA_PATH']
 else:
-    DATAPREP_REALDATA_FOLDERNAME_LOG = '/app/data/02_dataprep_REALDATA'
+    DATAPREP_REALDATA_FOLDERNAME_LOG = '/app/data/02_dataprep_realdata'
 
 # erstes CSV einlesen mit den Log-Daten
-log_data = pd.read_csv('GX_REALDATA_FILENAME_LOG')
+log_data = pd.read_csv(GX_REALDATA_FILENAME_LOG)
 
 # zweites CSV einlesen mit den Abschlussnoten
-grade_data = pd.read_csv('GX_REALDATA_FILENAME_GRADES')
+grade_data = pd.read_csv(GX_REALDATA_FILENAME_GRADES)
 
 log_data.head()
 #grade_data.head()
@@ -98,9 +98,10 @@ len(grouped_data['Vollständiger Name'])
 
 
 from datetime import datetime
-import locale
+import locale #, datetime
 
-locale.setlocale(locale.LC_TIME, "de_DE") # german
+#locale.setlocale(locale.LC_TIME, locale.normalize("de_DE"))
+locale.setlocale(locale.LC_TIME, "de_DE.UTF-8") # german
 'de_DE'
 
 # Anzahl der Vorkommen eines Users im ursprünglichen sim_data
@@ -130,6 +131,7 @@ period_boundaries = []
 # Zeitraumsgrenzen aufgefüllt
 
 current_date = start_date
+current_date = pd.Timestamp(current_date)
 while current_date <= end_date:
     period_boundaries.append(current_date)
     current_date += period_offset
@@ -141,6 +143,7 @@ log_counts['Anzahl_log_all'] = user_counts.reindex(log_counts['Vollständiger Na
 
 # Überprüfung des letzten Datums in sim_data
 last_date = log_data['Zeit'].max()
+last_date = pd.Timestamp(last_date)
 
 # Auffüllen der fehlenden Zeiträume basierend auf dem letzten Datum
 for i in range(len(period_boundaries)):
@@ -153,14 +156,16 @@ for i in range(len(period_boundaries)):
         
         if last_date >= period_end:
             # Datum liegt im Zeitraum, Log-Einträge zählen
-            log_entries_by_period = log_data[(log_data['Zeit'] >= period_start) & (log_data['Zeit'] < period_end)].groupby('Vollständiger Name').count()
+            period_start_date = period_start.date()
+            period_end_date = period_end.date()
+            log_entries_by_period = log_data[(log_data['Zeit'] >= period_start_date) & (log_data['Zeit'] < period_end_date)].groupby('Vollständiger Name').count()
             log_counts[f'Anzahl_log_f{i+1}'] = log_entries_by_period['Zeit'].reindex(log_counts['Vollständiger Name'], fill_value=0).values
         else:
             # Datum liegt außerhalb des Zeitraums, mit Mittelwert auffüllen als Ganzzahl
             log_counts[f'Anzahl_log_f{i+1}'] = np.mean(log_counts[[f'Anzahl_log_f{j}' for j in range(1, i+1)]], axis=1).astype(int)
 
-log_counts.head()
-
+print(log_counts.head())
+print(grouped_data.head())
 
 # In[8]:
 

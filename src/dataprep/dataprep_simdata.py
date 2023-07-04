@@ -8,8 +8,8 @@ import pandas as pd
 import numpy as np
 import os
 import locale
-import matplotlib.pyplot as plt
-import seaborn as sns
+#import matplotlib.pyplot as plt
+#import seaborn as sns
 from datetime import datetime
 #get_ipython().run_line_magic('matplotlib', 'inline')
 
@@ -74,7 +74,7 @@ sim_data_grade.head()
 
 
 # Notenverteilung prüfen - nur noch 30 Studierende 
-sns.histplot(sim_data_grade, bins = 50)
+#sns.histplot(sim_data_grade, bins = 50)
 
 
 # In[6]:
@@ -125,10 +125,12 @@ grouped_data.info()
 
 # In[9]:
 
+from datetime import datetime
+import locale #, datetime
 
 # im Datengenerator leider englische Namen verwendet... kann auskommentiert werden:
-#locale.setlocale(locale.LC_TIME, "en_US") # englische Monatsbezeichnung
-'en_US"'
+locale.setlocale(locale.LC_TIME, "en_US.UTF-8") # englische Monatsbezeichnung
+'en_US'
 
 # Anzahl der Vorkommen eines Users im ursprünglichen sim_data
 user_counts = sim_data['Vollständiger Name'].value_counts().rename('Anzahl_log_all')
@@ -158,6 +160,7 @@ period_boundaries = []
 # Zeitraumsgrenzen aufgefüllt
 
 current_date = start_date
+current_date = pd.Timestamp(current_date)
 while current_date <= end_date:
     period_boundaries.append(current_date)
     current_date += period_offset
@@ -179,9 +182,11 @@ for i in range(len(period_boundaries)):
     else:
         period_end = period_boundaries[i + 1]
         
-        if last_date >= period_end:
+        period_start_date = period_start.date()
+        period_end_date = period_end.date()
+        if last_date >= period_end_date:
             # Datum liegt im Zeitraum, Log-Einträge zählen
-            log_entries_by_period = sim_data[(sim_data['Zeit'] >= period_start) & (sim_data['Zeit'] < period_end)].groupby('Vollständiger Name').count()
+            log_entries_by_period = sim_data[(sim_data['Zeit'] >= period_start_date) & (sim_data['Zeit'] < period_end_date)].groupby('Vollständiger Name').count()
             log_counts[f'Anzahl_log_f{i+1}'] = log_entries_by_period['Zeit'].reindex(log_counts['Vollständiger Name'], fill_value=0).values
         else:
             # Datum liegt außerhalb des Zeitraums, mit Mittelwert auffüllen als Ganzzahl
