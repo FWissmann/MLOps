@@ -28,7 +28,7 @@ else:
 if 'DATAPREP_REALDATA_FOLDERNAME' in os.environ:
     DATAPREP_REALDATA_FOLDERNAME = os.environ['DATAPREP_REALDATA_PATH']
 else:
-    DATAPREP_REALDATA_FOLDERNAME = '/app/data/02_dataprep_realdata'
+    DATAPREP_REALDATA_FOLDERNAME = '/app/data/02_dataprep'
 
 if 'DATAPREP_REALDATA_FILENAME_LOG' in os.environ:
     DATAPREP_REALDATA_FILENAME_LOG = os.environ['DATAPREP_REALDATA_FILENAME']
@@ -37,7 +37,7 @@ else:
 if 'DATAPREP_REALDATA_FOLDERNAME_LOG' in os.environ:
     DATAPREP_REALDATA_FOLDERNAME_LOG = os.environ['DATAPREP_REALDATA_PATH']
 else:
-    DATAPREP_REALDATA_FOLDERNAME_LOG = '/app/data/02_dataprep_realdata'
+    DATAPREP_REALDATA_FOLDERNAME_LOG = '/app/data/02_dataprep'
 
 # erstes CSV einlesen mit den Log-Daten
 log_data = pd.read_csv(GX_REALDATA_FILENAME_LOG)
@@ -220,7 +220,7 @@ def check_grades(grade_csv):
         grouped_data_grade = pd.merge(grouped_data_log, grade_csv, on='Vollständiger Name', how='left')
         
         # Als CSV-file abspeichern
-        filename = DATAPREP_REALDATA_FILENAME + '/' + DATAPREP_REALDATA_FILENAME
+        filename = DATAPREP_REALDATA_FOLDERNAME + '/' + DATAPREP_REALDATA_FILENAME
         grouped_data_grade.to_csv(filename, index=False)
         
         return grouped_data_grade.head()

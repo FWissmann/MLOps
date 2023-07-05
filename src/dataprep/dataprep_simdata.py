@@ -28,7 +28,7 @@ else:
 if 'DATAPREP_SIMDATA_PATH' in os.environ:
     DATAPREP_SIMDATA_PATH = os.environ['DATAPREP_SIMDATA_PATH']
 else:
-    DATAPREP_SIMDATA_PATH = '/app/data/02_dataprep_simdata'
+    DATAPREP_SIMDATA_PATH = '/app/data/02_dataprep'
 
 # In[2]:
 

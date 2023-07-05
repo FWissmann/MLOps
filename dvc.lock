@@ -17,21 +17,28 @@ stages:
   data_gen:
     cmd: docker run -i --rm --name data_gen_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/src/data_generator,dst=/app/ data_gen:2
+    deps:
+    - path: ./src/data_generator/data_gen.py
+      md5: ebac1b52771cc2fc72ddc2c291f541f6
+      size: 17180
     outs:
     - path: ./data/00_simdata/00_simdata.csv
-      md5: 3d3c72850b6ea7b539e5e016e5601cb8
-      size: 141938
+      md5: 69d4889b4a65ca56db71ea79012cbc07
+      size: 142242
   data_check:
     cmd: docker run -i --rm --name gx_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ gx_simdata:3
     deps:
     - path: ./data/00_simdata/00_simdata.csv
-      md5: 3d3c72850b6ea7b539e5e016e5601cb8
-      size: 141938
+      md5: 69d4889b4a65ca56db71ea79012cbc07
+      size: 142242
+    - path: ./src/gx_datacheck/gx_simdata.py
+      md5: ed1d5990b01b24f7cf09abcd8ef551b7
+      size: 5453
     outs:
     - path: ./data/01_gx/01_gx_simdata.csv
-      md5: 3d3c72850b6ea7b539e5e016e5601cb8
-      size: 141938
+      md5: 69d4889b4a65ca56db71ea79012cbc07
+      size: 142242
   data_check_real:
     cmd: docker run -i --rm --name gx_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ --env REALDATA_LOG_FILENAME=/app/data/00_rawdata/RTWIBSE_W22/RTWIBSE_W22_log.csv
@@ -52,3 +59,34 @@ stages:
     - path: ./data/01_gx/01_gx_realdata_logs.csv
       md5: 8bf129c757e731bde0258341a20e60c2
       size: 1478741
+  data_prep:
+    cmd: docker run -i --rm --name dataprep_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
+      --mount type=bind,src=/home/aml/MLOps/src/dataprep,dst=/app/ dataprep_simdata:4
+    deps:
+    - path: ./data/01_gx/01_gx_simdata.csv
+      md5: 69d4889b4a65ca56db71ea79012cbc07
+      size: 142242
+    - path: ./src/dataprep/dataprep_simdata.py
+      md5: ac741c0df70a006ac1798601f3389f19
+      size: 7179
+    outs:
+    - path: ./data/02_dataprep/02_dataprep_simdata.csv
+      md5: afcc6f8910250e23d53cd478787d01eb
+      size: 2134
+  data_prep_real:
+    cmd: docker run -i --rm --name dataprep_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
+      --mount type=bind,src=/home/aml/MLOps/src/dataprep,dst=/app/ dataprep_realdata:3
+    deps:
+    - path: ./data/01_gx/01_gx_realdata_grades.csv
+      md5: e8fe422073abf9454a217c48022abe6f
+      size: 530
+    - path: ./data/01_gx/01_gx_realdata_logs.csv
+      md5: 8bf129c757e731bde0258341a20e60c2
+      size: 1478741
+    - path: ./src/dataprep/dataprep_realdata.py
+      md5: cb1bd73b1d65e5955b4b6b7f5b3b8724
+      size: 8593
+    outs:
+    - path: ./data/02_dataprep/02_dataprep_realdata.csv
+      md5: 428fe9fdf4f3cca2c700dde986d77a81
+      size: 6281
