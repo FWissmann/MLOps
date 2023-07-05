@@ -1,16 +1,10 @@
 input_features:
-    - name: Zeit
-      type: date
-    - name: Komponente
-      type: category
-    - name: Beschreibung
+    - name: Vollstaendiger Name
       type: text
-    - name: IP-Adresse
-      type: text
-    - name: Ereignisname
-      type: text
-    - name: Ereigniskontext
-      type: category
+    - name: ('Herkunft', 'Anzahl web')
+      type: number
+    - name: ('Komponente', 'Anzahl Link/URL')
+      type: number
 output_features:
-    - name: Abschlussnote
+    - name: bewertung
       type: number

@@ -185,7 +185,7 @@ grouped_data_log.head()
 
 # Vollständiger Name doppelt - zweite Spalte droppen
 grouped_data_log = grouped_data_log.drop(('Vollständiger Name', ''), axis=1)
-grouped_data_log
+#grouped_data_log.rename(columns={'Vollständiger Name': 'Vollstaendiger Name'})
 
 
 # In[10]:
@@ -198,13 +198,14 @@ grade_data
 # In[11]:
 
 
+
 def check_grades(grade_csv):
     if grade_csv['bewertung'].isnull().all():
         # Wenn die Spalte 'bewertung' leer ist > Produktionsdaten, keine Trainingsdaten
-        
+        grouped_data_log_rename = grouped_data_log.rename(columns={'Vollständiger Name': 'Vollstaendiger Name'})
         # gleich als CSV file abspeichern
         filename = DATAPREP_REALDATA_FOLDERNAME_LOG + '/' + DATAPREP_REALDATA_FILENAME_LOG
-        grouped_data_log.to_csv(filename, index=False)
+        grouped_data_log_rename.to_csv(filename, index=False)
         return grouped_data_log.head()
     
     
@@ -218,7 +219,7 @@ def check_grades(grade_csv):
         
         # Abschlussnote aus dem zweiten df grade_data_log dem jeweiligen User zuordnen
         grouped_data_grade = pd.merge(grouped_data_log, grade_csv, on='Vollständiger Name', how='left')
-        
+        grouped_data_grade = grouped_data_grade.rename(columns={'Vollständiger Name': 'Vollstaendiger Name'})
         # Als CSV-file abspeichern
         filename = DATAPREP_REALDATA_FOLDERNAME + '/' + DATAPREP_REALDATA_FILENAME
         grouped_data_grade.to_csv(filename, index=False)

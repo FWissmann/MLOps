@@ -84,23 +84,37 @@ stages:
       md5: 8bf129c757e731bde0258341a20e60c2
       size: 1478741
     - path: ./src/dataprep/dataprep_realdata.py
-      md5: cb1bd73b1d65e5955b4b6b7f5b3b8724
-      size: 8593
+      md5: af68b7a77015d90ca7d8b6109149a01e
+      size: 8872
     outs:
     - path: ./data/02_dataprep/02_dataprep_realdata.csv
-      md5: 428fe9fdf4f3cca2c700dde986d77a81
+      md5: 54c6f34f10fd7f5a45b58f00180eb951
       size: 6281
   data_prep_gx_real:
     cmd: docker run -i --rm --name dataprep_gx_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/src/gx_dataprep,dst=/app/ dataprep_gx_realdata:3
     deps:
     - path: ./data/02_dataprep/02_dataprep_realdata.csv
-      md5: 428fe9fdf4f3cca2c700dde986d77a81
+      md5: 54c6f34f10fd7f5a45b58f00180eb951
       size: 6281
     - path: ./src/gx_dataprep/gx_realdata_grouped.py
-      md5: 29246432168a3fff327b2adb6f878976
+      md5: bec5372524a39d9bd79089a0f40cb07b
       size: 2981
     outs:
     - path: ./data/03_gx_dataprep/03_dataprep_gx_realdata.parquet
-      md5: 9353e462282f9cff0dbdec3b79192780
-      size: 24367
+      md5: fa1598ca070d6f39406e451db74180ca
+      size: 24351
+  train_real:
+    cmd: docker run -i --rm --name ludwig_experiment_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
+      --mount type=bind,src=/home/aml/MLOps/conf/ludwig_experiment,dst=/app/conf --env
+      MLFLOW_TRACKING_URI=http://172.17.0.4:5000/ ludwig_experiment:2 experiment --config
+      /app/conf/ludwig_conf.yaml --dataset /app/data/03_gx_dataprep/03_dataprep_gx_realdata.parquet
+      --output_directory /app/data/04_model_results --mlflow --experiment_name relax_real
+      --model_name real
+    deps:
+    - path: ./conf/ludwig_experiment/ludwig_conf.yaml
+      md5: 5199fb29fa48ea06532378ca1e61048a
+      size: 254
+    - path: ./data/03_gx_dataprep/03_dataprep_gx_realdata.parquet
+      md5: fa1598ca070d6f39406e451db74180ca
+      size: 24351

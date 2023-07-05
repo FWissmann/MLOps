@@ -26,7 +26,7 @@ validator_log = context.sources.pandas_default.read_csv(DATAPREP_REALDATA_FILENA
 # #### Anforderungen festlegen (können beliebig viele sein)
 
 # Anforderung an Logdatei: keine Nullwerte
-validator_log.expect_column_values_to_not_be_null('Vollständiger Name')
+validator_log.expect_column_values_to_not_be_null('Vollstaendiger Name')
 validator_log.expect_column_values_to_not_be_null('Anzahl_log_all')
 
 # #### Daten auf Basis der Anforderungen validieren 
@@ -72,7 +72,7 @@ def save_file_with_version(filename, container_path, data):
 
 
 if checkpoint_result_log["success"]:
-    print("Die Expectations für die Logdatei wurden erfüllt. Die relevanten Spalten 'Vollständiger Name'und 'Anzahl_log_all' enthalten keine Nullwerte.")
+    print("Die Expectations für die Logdatei wurden erfüllt. Die relevanten Spalten 'Vollstaendiger Name'und 'Anzahl_log_all' enthalten keine Nullwerte.")
     log_data = pd.read_csv(DATAPREP_REALDATA_FILENAME)
     save_file_with_version(DATAPREP_GX_REALDATA_FILENAME, DATAPREP_GX_REALDATA_PATH, log_data)
 else:

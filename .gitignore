@@ -10,7 +10,7 @@ pipeline/
 data/00_simdata
 data/01_gx
 data/02_dataprep
-data/03_dataprep_gx
+data/03_gx_dataprep
 data/04_model_results
 
 # Misc
