@@ -52,9 +52,9 @@ stages:
     cmd: docker run -i --rm --name dataprep_gx_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_dataprep,dst=/app/ dataprep_gx_realdata:3
     deps:
     - ./data/02_dataprep/02_dataprep_realdata.csv
-    - ./src/dataprep_gx/gx_realdata_grouped.py
+    - ./src/gx_dataprep/gx_realdata_grouped.py
     outs:
-    - ./data/01_gx/03_dataprep_gx/03_dataprep_gx_realdata.parquet
+    - ./data/03_gx_dataprep/03_dataprep_gx_realdata.parquet
   train_real:
     cmd: docker run -i --rm --name ludwig_experiment_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/conf/ludwig_experiment,dst=/app/conf --env MLFLOW_TRACKING_URI=http://172.17.0.4:5000/
@@ -63,4 +63,4 @@ stages:
       --mlflow --experiment_name relax_real --model_name real
     deps:
     - ./conf/ludwig_experiment/ludwig_conf.yaml
-    - ./data/01_gx/03_dataprep_gx/03_dataprep_gx_realdata.parquet
+    - ./data/03_gx_dataprep/03_dataprep_gx_realdata.parquet

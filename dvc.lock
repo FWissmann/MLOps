@@ -90,3 +90,17 @@ stages:
     - path: ./data/02_dataprep/02_dataprep_realdata.csv
       md5: 428fe9fdf4f3cca2c700dde986d77a81
       size: 6281
+  data_prep_gx_real:
+    cmd: docker run -i --rm --name dataprep_gx_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
+      --mount type=bind,src=/home/aml/MLOps/src/gx_dataprep,dst=/app/ dataprep_gx_realdata:3
+    deps:
+    - path: ./data/02_dataprep/02_dataprep_realdata.csv
+      md5: 428fe9fdf4f3cca2c700dde986d77a81
+      size: 6281
+    - path: ./src/gx_dataprep/gx_realdata_grouped.py
+      md5: 29246432168a3fff327b2adb6f878976
+      size: 2981
+    outs:
+    - path: ./data/03_gx_dataprep/03_dataprep_gx_realdata.parquet
+      md5: 9353e462282f9cff0dbdec3b79192780
+      size: 24367

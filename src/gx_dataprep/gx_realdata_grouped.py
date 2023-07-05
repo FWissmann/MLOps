@@ -17,7 +17,7 @@ else:
 if 'DATAPREP_GX_REALDATA_PATH' in os.environ:
     DATAPREP_GX_REALDATA_PATH = os.environ['DATAPREP_GX_REALDATA_PATH']
 else:
-    DATAPREP_GX_REALDATA_PATH = '/app/data/03_dataprep_gx'
+    DATAPREP_GX_REALDATA_PATH = '/app/data/03_gx_dataprep'
 
 context = gx.get_context()
 
