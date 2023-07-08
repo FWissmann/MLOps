@@ -1,10 +1,10 @@
-md5: 4335a2e553e15457a56603cbf90a4487
+md5: e74036ee484b54b9c57bfb7448944fb0
 frozen: true
 deps:
 - path: data-registry/RTWIBSE_W22
   repo:
     url: https://github.com/cdeck3r/GradePredictionData
-    rev_lock: e09b520458d4c6587f43b351f7edc0b346d3533e
+    rev_lock: 08283fced25f592ae433af8324510374fda3772b
 outs:
 - md5: 1762eeb756acde0c2ca017dbf54e73ca.dir
   size: 1479271
