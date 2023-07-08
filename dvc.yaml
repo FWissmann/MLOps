@@ -1,14 +1,15 @@
 vars:
   - realdata: RTWIBSE_W22
+  - MLFLOW_TRACKING_URI: http://172.17.0.4:5000/
 stages:
   train:
     cmd: docker run -i --rm --name ludwig_experiment_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
-      --mount type=bind,src=/home/aml/MLOps/conf/ludwig_experiment,dst=/app/conf --env MLFLOW_TRACKING_URI=http://172.17.0.4:5000/
-      ludwig_experiment:2 experiment --config /app/conf/ludwig_conf.yaml --dataset
+      --mount type=bind,src=/home/aml/MLOps/conf/ludwig_experiment,dst=/app/conf --env MLFLOW_TRACKING_URI={MLFLOW_TRACKING_URI}
+      ludwig_experiment:2 experiment --config /app/conf/ludwig_conf_sim.yaml --dataset
       /app/data/02_dataprep/02_dataprep_simdata.csv --output_directory /app/data/04_model_results
-      --mlflow --experiment_name relax --model_name generator
+      --mlflow --experiment_name relax --model_name simdata
     deps:
-    - ./conf/ludwig_experiment/ludwig_conf.yaml
+    - ./conf/ludwig_experiment/ludwig_conf_sim.yaml
     - ./data/02_dataprep/02_dataprep_simdata.csv
   data_gen:
     cmd: docker run -i --rm --name data_gen_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/data_generator,dst=/app/
@@ -57,10 +58,10 @@ stages:
     - ./data/03_gx_dataprep/03_dataprep_gx_realdata.parquet
   train_real:
     cmd: docker run -i --rm --name ludwig_experiment_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
-      --mount type=bind,src=/home/aml/MLOps/conf/ludwig_experiment,dst=/app/conf --env MLFLOW_TRACKING_URI=http://172.17.0.4:5000/
-      ludwig_experiment:2 experiment --config /app/conf/ludwig_conf.yaml --dataset
+      --mount type=bind,src=/home/aml/MLOps/conf/ludwig_experiment,dst=/app/conf --env MLFLOW_TRACKING_URI=${MLFLOW_TRACKING_URI}
+      ludwig_experiment:2 experiment --config /app/conf/ludwig_conf_real.yaml --dataset
       /app/data/03_gx_dataprep/03_dataprep_gx_realdata.parquet --output_directory /app/data/04_model_results
-      --mlflow --experiment_name relax_real --model_name real
+      --mlflow --experiment_name relax_real --model_name realdata
     deps:
-    - ./conf/ludwig_experiment/ludwig_conf.yaml
+    - ./conf/ludwig_experiment/ludwig_conf_real.yaml
     - ./data/03_gx_dataprep/03_dataprep_gx_realdata.parquet

@@ -1,0 +1,12 @@
+input_features:
+    - name: ('Komponente', 'Anzahl Link/URL')
+      type: number
+    - name: ('Komponente', 'Anzahl Forum')
+      type: number
+    - name: ('Komponente', 'Anzahl System')
+      type: number
+    - name: ('Komponente', 'Anzahl Gefuehrte Touren')
+      type: number
+output_features:
+    - name: bewertung
+      type: number

@@ -211,12 +211,13 @@ grouped_data_sim.head()
 # Abschlussnote aus nach jeweiligen User mergen
 
 grouped_data_grade = pd.merge(grouped_data_sim, sim_data_grade, on='Vollständiger Name', how='left')
+grouped_data_grade = grouped_data_grade.drop(('Vollständiger Name', ''), axis=1)
 
-grouped_data_grade.head()
+print(grouped_data_grade.head())
 
 
 # In[12]:
 
 filename = DATAPREP_SIMDATA_PATH + '/' + DATAPREP_SIMDATA_FILENAME
-grouped_data_sim.to_csv(filename, index=False)
+grouped_data_grade.to_csv(filename, index=False)
 
