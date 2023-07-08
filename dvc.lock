@@ -113,8 +113,8 @@ stages:
       --model_name realdata
     deps:
     - path: ./conf/ludwig_experiment/ludwig_conf_real.yaml
-      md5: 34f241f1b05d04f8adc4e1a0eebbe9a4
-      size: 347
+      md5: f532c0aacf7d1b9ee846547b68fcb20b
+      size: 1377
     - path: ./data/03_gx_dataprep/03_dataprep_gx_realdata.parquet
       md5: 25d1c17aca1850ae50d4f94d9a8ab485
       size: 24293
