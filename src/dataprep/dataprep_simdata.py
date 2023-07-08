@@ -213,6 +213,8 @@ grouped_data_sim.head()
 grouped_data_grade = pd.merge(grouped_data_sim, sim_data_grade, on='Vollständiger Name', how='left')
 grouped_data_grade = grouped_data_grade.drop(('Vollständiger Name', ''), axis=1)
 
+grouped_data_grade = grouped_data_grade.rename(columns={'Vollständiger Name': 'Vollstaendiger Name'})
+
 print(grouped_data_grade.head())
 
 
