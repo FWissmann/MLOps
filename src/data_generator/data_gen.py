@@ -23,7 +23,6 @@ if 'SIMDATA_FOLDERNAME' in os.environ:
 else:
     SIMDATA_FOLDERNAME = '/app/data/00_simdata'
 
-
 columns =  ['Zeit', 'Vollständiger Name', 'Betroffene/r Nutzer/in', 'Ereigniskontext', 'Komponente', 'Ereignisname', 'Beschreibung', 'Herkunft', 'IP-Adresse']
 sim_data = pd.DataFrame(columns = columns)
 

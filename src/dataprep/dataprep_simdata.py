@@ -1,17 +1,10 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-# In[1]:
-
-
 import pandas as pd
 import numpy as np
 import os
 import locale
-#import matplotlib.pyplot as plt
-#import seaborn as sns
 from datetime import datetime
-#get_ipython().run_line_magic('matplotlib', 'inline')
 
 # Check if environmet variables are set otherwise use defaults
 # Input variables
@@ -30,27 +23,8 @@ if 'DATAPREP_SIMDATA_PATH' in os.environ:
 else:
     DATAPREP_SIMDATA_PATH = '/app/data/02_dataprep'
 
-# In[2]:
-
-
 # erstes CSV einlesen mit den Log-Daten
 sim_data = pd.read_csv(GX_SIMDATA_FILENAME)
-
-# zweites CSV einlesen mit den Abschlussnoten
-#grade_data = pd.read_csv('')
-
-sim_data.head()
-#grade_data.head()
-
-
-# In[3]:
-
-
-sim_data.info()
-
-
-# In[4]:
-
 
 # Neues df erstellen nur User und Abschlussnote
 # Index wird standardmäßig beibehalten
@@ -67,19 +41,6 @@ sim_data_grade = sim_data_grade.rename(columns={'Vollständiger Name': 'Vollstä
 # Noten >4.0 mit 5.0 ersetzen
 sim_data_grade.loc[sim_data_grade['bewertung'] > 4.0, 'bewertung'] = 5.0
 
-sim_data_grade.head()
-
-
-# In[5]:
-
-
-# Notenverteilung prüfen - nur noch 30 Studierende 
-#sns.histplot(sim_data_grade, bins = 50)
-
-
-# In[6]:
-
-
 # eindeutige Werte der Spalten 'Voll.Name', 'Komponente', 'Herkunft' von sim_data als array ausgeben 
 
 unique_name = sim_data['Vollständiger Name'].unique()
@@ -91,10 +52,6 @@ unique_herkunft = sim_data['Herkunft'].unique()
 length_name = len(unique_name)
 length_komponente = len(unique_komponente)
 length_herkunft = len(unique_herkunft)
-
-
-# In[7]:
-
 
 # neues df mit Auswertparameter von sim_data nach Spalte 'Vollständiger Name' erstellen
 # pro eindeutiger Parameter in den Spalten 'Komponente' und 'Herkunft' soll eine neue Spalte in grouped_sim erstellen werden
@@ -112,25 +69,8 @@ grouped_data = sim_data.groupby('Vollständiger Name').agg({
     'IP-Adresse': 'nunique'
 }).reset_index()
 
-grouped_data.head()
-
-
-# In[8]:
-
-
-grouped_data.info()
-
-# i.O. - 30 Zeilen - es wurden auch 30 Studierende im data_gen simuliert
-
-
-# In[9]:
-
-from datetime import datetime
-import locale #, datetime
-
 # im Datengenerator leider englische Namen verwendet... kann auskommentiert werden:
 locale.setlocale(locale.LC_TIME, "en_US.UTF-8") # englische Monatsbezeichnung
-'en_US'
 
 # Anzahl der Vorkommen eines Users im ursprünglichen sim_data
 user_counts = sim_data['Vollständiger Name'].value_counts().rename('Anzahl_log_all')
@@ -193,20 +133,9 @@ for i in range(len(period_boundaries)):
             # Datum liegt außerhalb des Zeitraums, mit Mittelwert auffüllen als Ganzzahl
             log_counts[f'Anzahl_log_f{i+1}'] = np.mean(log_counts[[f'Anzahl_log_f{j}' for j in range(1, i+1)]], axis=1).astype(int)
 
-log_counts.head()
-
-
-# In[10]:
-
 
 # Anzahl log-Einträge mit sim_data mergen nach 'Vollständiger Name'
 grouped_data_sim = grouped_data.merge(log_counts, on='Vollständiger Name')
-
-grouped_data_sim.head()
-
-
-# In[11]:
-
 
 # Abschlussnote aus nach jeweiligen User mergen
 
@@ -217,9 +146,5 @@ grouped_data_grade = grouped_data_grade.rename(columns={'Vollständiger Name': '
 
 print(grouped_data_grade.head())
 
-
-# In[12]:
-
 filename = DATAPREP_SIMDATA_PATH + '/' + DATAPREP_SIMDATA_FILENAME
 grouped_data_grade.to_csv(filename, index=False)
-

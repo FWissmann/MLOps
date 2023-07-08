@@ -5,6 +5,7 @@ import numpy as np
 
 # Check if environment variable is set otherwise set it to default
 # default = realdata
+
 # Input variables
 if 'DATAPREP_DATA_FILENAME' in os.environ:
     DATAPREP_EALDATA_FILENAME = os.environ['DATAPREP_DATA_FILENAME']
@@ -74,5 +75,3 @@ if checkpoint_result_log["success"]:
     save_file_with_version(DATAPREP_GX_REALDATA_FILENAME, DATAPREP_GX_REALDATA_PATH, log_data)
 else:
     print("Die Expectations für die Logdatei wurden nicht erfüllt.")
-    
-
