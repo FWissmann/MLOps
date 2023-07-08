@@ -1,21 +1,22 @@
 import great_expectations as gx
+import os
 import pandas as pd
 import numpy as np
-import os
 
 # Check if environment variable is set otherwise set it to default
+# default = realdata
 # Input variables
-if 'DATAPREP_REALDATA_FILENAME' in os.environ:
-    DATAPREP_REALDATA_FILENAME = os.environ['DATAPREP_REALDATA_FILENAME']
+if 'DATAPREP_DATA_FILENAME' in os.environ:
+    DATAPREP_EALDATA_FILENAME = os.environ['DATAPREP_DATA_FILENAME']
 else:    
     DATAPREP_REALDATA_FILENAME = '/app/data/02_dataprep/02_dataprep_realdata.csv'
 # Output variables
-if 'DATAPREP_GX_REALDATA_FILENAME' in os.environ:
-    DATAPREP_GX_REALDATA_FILENAME = os.environ['DATAPREP_GX_REALDATA_FILENAME']
+if 'DATAPREP_GX_DATA_FILENAME' in os.environ:
+    DATAPREP_GX_REALDATA_FILENAME = os.environ['DATAPREP_GX_DATA_FILENAME']
 else:
     DATAPREP_GX_REALDATA_FILENAME = '03_dataprep_gx_realdata.parquet'
-if 'DATAPREP_GX_REALDATA_PATH' in os.environ:
-    DATAPREP_GX_REALDATA_PATH = os.environ['DATAPREP_GX_REALDATA_PATH']
+if 'DATAPREP_GX_DATA_PATH' in os.environ:
+    DATAPREP_GX_REALDATA_PATH = os.environ['DATAPREP_GX_DATA_PATH']
 else:
     DATAPREP_GX_REALDATA_PATH = '/app/data/03_gx_dataprep'
 
@@ -38,9 +39,6 @@ checkpoint_log = gx.checkpoint.SimpleCheckpoint(
 )
 
 checkpoint_result_log = checkpoint_log.run()
-
-# Alternative Programmierung: result = validator.validate()
-
 
 # #### Ergebnis der Validierung ausgeben lassen 
 
@@ -69,7 +67,6 @@ def save_file_with_version(filename, container_path, data):
     data.to_parquet(new_filepath, index=False)
     # data.to_csv(new_filepath, index=False)
     print(f'Die CSV wurde unter {filename} als Parquet-Datei gespeichert.')
-
 
 if checkpoint_result_log["success"]:
     print("Die Expectations für die Logdatei wurden erfüllt. Die relevanten Spalten 'Vollstaendiger Name'und 'Anzahl_log_all' enthalten keine Nullwerte.")

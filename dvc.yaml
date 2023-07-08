@@ -34,7 +34,7 @@ stages:
     outs:
     - ./data/02_dataprep/02_dataprep_simdata.csv
   data_prep_gx:
-    cmd: docker run -i --rm --name dataprep_gx_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_dataprep,dst=/app/ --env DATAPREP_REALDATA_FILENAME=/app/data/02_dataprep/02_dataprep_simdata.csv --env DATAPREP_GX_REALDATA_FILENAME=03_dataprep_gx_simdata.parquet dataprep_gx_data:4
+    cmd: docker run -i --rm --name dataprep_gx_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_dataprep,dst=/app/ --env DATAPREP_DATA_FILENAME=/app/data/02_dataprep/02_dataprep_simdata.csv --env DATAPREP_GX_DATA_FILENAME=03_dataprep_gx_simdata.parquet dataprep_gx_data:4
     deps:
     - ./data/02_dataprep/02_dataprep_simdata.csv
     - ./src/gx_dataprep/gx_data_grouped.py
