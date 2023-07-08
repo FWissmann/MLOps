@@ -1,19 +1,13 @@
-aml@213.136.77.216
-# Local model for serving, needs to be changed
+# Local model for serving
 src/ludwig_serve/model
 # MLFlow
 MLFlow/mlartifacts
-MLFlow/mlartifacts_old
 MLFlow/mlflow.db
-MLFlow/mlflow_old.db
-# Pipeline
-pipeline/
 # Data
 data/00_simdata
 data/01_gx
 data/02_dataprep
 data/03_gx_dataprep
 data/04_model_results
-
 # Misc
 z_MISC
