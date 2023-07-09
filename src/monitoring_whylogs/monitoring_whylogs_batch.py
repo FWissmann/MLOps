@@ -102,7 +102,7 @@ if response.status_code == 200:
         df_results.to_csv(f'./data/05_results/05_results.csv', index=False)
 
     else:
-        print(f'{gctm()}Dataframe enthält Spalte bewertung, daher Logging von Inputs')
+        print(f'{gctm()}Dataframe enthält Spalte bewertung nicht, daher Logging von Inputs')
         os.environ["WHYLABS_DEFAULT_DATASET_ID"] = 'model-10' #can also be provided as dataset_id param in WhyLabsWriter constructor
         results = why.log(df_results)
 

@@ -1,6 +1,6 @@
 vars:
   - realdata: RTWIBSE_W22
-  - testdata: RTWIBNet_W22
+  - testdata: RTWIBStat_SS23
   - MLFLOW_TRACKING_URI: http://172.17.0.4:5000/
 stages:
   train:
