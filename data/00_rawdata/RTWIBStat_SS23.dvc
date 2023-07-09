@@ -1,0 +1,12 @@
+md5: 13e4ed68abe34b77995c1e9a7b56a624
+frozen: true
+deps:
+- path: data-registry/RTWIBStat_SS23
+  repo:
+    url: https://github.com/cdeck3r/GradePredictionData/
+    rev_lock: 08283fced25f592ae433af8324510374fda3772b
+outs:
+- md5: 70106b09ca0236cb9714b442028b6faf.dir
+  size: 3237431
+  nfiles: 2
+  path: RTWIBStat_SS23

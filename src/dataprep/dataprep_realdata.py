@@ -29,11 +29,11 @@ else:
     DATAPREP_REALDATA_FOLDERNAME = '/app/data/02_dataprep'
 
 if 'DATAPREP_REALDATA_FILENAME_LOG' in os.environ:
-    DATAPREP_REALDATA_FILENAME_LOG = os.environ['DATAPREP_REALDATA_FILENAME']
+    DATAPREP_REALDATA_FILENAME_LOG = os.environ['DATAPREP_REALDATA_FILENAME_LOG']
 else:  
-    DATAPREP_REALDATA_FILENAME_LOG = '02_dataprep_realdata_logs.csv'
+    DATAPREP_REALDATA_FILENAME_LOG = '02_dataprep_testdata.csv'
 if 'DATAPREP_REALDATA_FOLDERNAME_LOG' in os.environ:
-    DATAPREP_REALDATA_FOLDERNAME_LOG = os.environ['DATAPREP_REALDATA_PATH']
+    DATAPREP_REALDATA_FOLDERNAME_LOG = os.environ['DATAPREP_REALDATA_FOLDERNAME_LOG']
 else:
     DATAPREP_REALDATA_FOLDERNAME_LOG = '/app/data/02_dataprep'
 
@@ -152,28 +152,26 @@ grouped_data_log = grouped_data_log.drop(('Vollständiger Name', ''), axis=1)
 def check_grades(grade_csv):
     if grade_csv['bewertung'].isnull().all():
         # Wenn die Spalte 'bewertung' leer ist > Produktionsdaten, keine Trainingsdaten
-        grouped_data_log_rename = grouped_data_log.rename(columns={'Vollständiger Name': 'Vollstaendiger Name', "('Komponente', 'Anzahl Geführte Touren')": "('Komponente', 'Anzahl Gefuehrte Touren')", "('Komponente', 'Anzahl Übersicht für Teilnehmer/in')": "('Komponente', 'Anzahl Uebersicht fuer Teilnehmer/in')", "('Komponente', 'Anzahl Übersicht')": "('Komponente', 'Anzahl Uebersicht')"})
+        grouped_data_log_rename = grouped_data_log.rename(columns={'Vollständiger Name': 'Vollstaendiger Name', ('Komponente', 'Anzahl Geführte Touren'): ('Komponente', 'Anzahl Gefuehrte Touren'), ('Komponente', 'Anzahl Übersicht für Teilnehmer/in'): ('Komponente', 'Anzahl Uebersicht fuer Teilnehmer/in'), ('Komponente', 'Anzahl Übersicht'): ('Komponente', 'Anzahl Uebersicht')})
         # gleich als CSV file abspeichern
         filename = DATAPREP_REALDATA_FOLDERNAME_LOG + '/' + DATAPREP_REALDATA_FILENAME_LOG
         grouped_data_log_rename.to_csv(filename, index=False)
-        return grouped_data_log.head()
-    
+        print(f'CSV-Datei mit Testdaten wurde erstellt. Dateiname: {filename}')
+        return grouped_data_log.head()    
     else:
         # ansonsten Spalte mit den Noten anpassen:
         # Bewertung / 100 ergibt die Schulnote
-        grade_csv['bewertung'] = grade_csv['bewertung']/100
-        
+        grade_csv['bewertung'] = grade_csv['bewertung']/100        
         # Wenn es zu dem User keine Bewertung gibt - ersetzte NaN mit 5.0
-        grade_csv['bewertung'] = grade_csv['bewertung'].fillna(5.0)
-        
+        grade_csv['bewertung'] = grade_csv['bewertung'].fillna(5.0)       
         # Abschlussnote aus dem zweiten df grade_data_log dem jeweiligen User zuordnen
         grouped_data_grade = pd.merge(grouped_data_log, grade_csv, on='Vollständiger Name', how='left')
         grouped_data_grade = grouped_data_grade.rename(columns={'Vollständiger Name': 'Vollstaendiger Name', ('Komponente', 'Anzahl Geführte Touren'): ('Komponente', 'Anzahl Gefuehrte Touren'), ('Komponente', 'Anzahl Übersicht für Teilnehmer/in'): ('Komponente', 'Anzahl Uebersicht fuer Teilnehmer/in'), ('Komponente', 'Anzahl Übersicht'): ('Komponente', 'Anzahl Uebersicht')})
-        # Als CSV-file abspeichern
         grouped_data_grade['bewertung'] = grouped_data_grade['bewertung'].fillna(5.0)
+        # Als CSV-file abspeichern
         filename = DATAPREP_REALDATA_FOLDERNAME + '/' + DATAPREP_REALDATA_FILENAME
         grouped_data_grade.to_csv(filename, index=False)
-        
+        print(f'CSV-Datei mit Traindaten wurde erstellt. Dateiname: {filename}')
         return grouped_data_grade.head()
 
 check_grades(grade_data)

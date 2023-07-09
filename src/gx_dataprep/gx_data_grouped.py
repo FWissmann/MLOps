@@ -8,7 +8,7 @@ import numpy as np
 
 # Input variables
 if 'DATAPREP_DATA_FILENAME' in os.environ:
-    DATAPREP_EALDATA_FILENAME = os.environ['DATAPREP_DATA_FILENAME']
+    DATAPREP_REALDATA_FILENAME = os.environ['DATAPREP_DATA_FILENAME']
 else:    
     DATAPREP_REALDATA_FILENAME = '/app/data/02_dataprep/02_dataprep_realdata.csv'
 # Output variables
