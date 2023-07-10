@@ -23,8 +23,11 @@ if 'SIMDATA_FOLDERNAME' in os.environ:
 else:
     SIMDATA_FOLDERNAME = '/app/data/00_simdata'
 
+
 columns =  ['Zeit', 'Vollständiger Name', 'Betroffene/r Nutzer/in', 'Ereigniskontext', 'Komponente', 'Ereignisname', 'Beschreibung', 'Herkunft', 'IP-Adresse']
 sim_data = pd.DataFrame(columns = columns)
+sim_data.head()
+
 
 # ### Festlegung: Anzahl von Zeilen: Testdatei ca. 800 Zeilen > 1000 Zeilen generieren 
 
@@ -36,10 +39,20 @@ end = datetime.now()
 # Spalte 'Zeit' leer setzen:
 sim_data['Zeit'] = ''
 
+
+# In[38]:
+
+
 for i in range(anzahl_zeilen):
     zufaellige_dauer = random.randint(1, int((end - start).total_seconds() // 60))
     zeitstempel = start + timedelta(minutes=zufaellige_dauer)
     sim_data.loc[i, 'Zeit'] = zeitstempel
+
+sim_data.head()
+
+
+# In[39]:
+
 
 # Format korrigieren:
 
@@ -49,14 +62,56 @@ sim_data['Zeit'] = pd.to_datetime(sim_data['Zeit'])
 # Formatierung der Spalte 'Zeit'
 sim_data['Zeit'] = sim_data['Zeit'].dt.strftime('%d. %B %Y, %H:%M:%S')
 
+sim_data.head()
+
+
+# In[41]:
+
+
 # Sortieren nach aufsteigenden Zeitstempel
 sim_data = sim_data.sort_values(by='Zeit')
 
 # Index zurücksetzen
 sim_data = sim_data.reset_index(drop=True)
 
+sim_data.head(1000)
+
+
+# In[42]:
+
+
+# überprüfen, ob nur 1000 Zeilen erstellen worden sind:
+#sim_data.info()
+
+# 1000 Zeilen OK - Enddatum zwar nicht der 19.05.2023, aber irrelevant für die simulierten Daten. 
+
+
+# ## 2) Vollständiger Name: alphanumerische Zeichenkette
+
+# In[61]:
+
+# In[62]:
+
+
 # Festlegen des Zufallssaatwerts für Reproduzierbarkeit auf 101
 random.seed(101) 
+
+
+# In[63]:
+
+
+# Methode zum Erstellen von Zeichenketten erstellen
+#def generate_random_string():
+    # random Buchstabenkette erstellen 
+ #   random_letters = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
+    # random Zahlen erstellen 
+  #  random_string = random.choice(strings)
+    
+   # random_stringletter = f'{random_string}{random_letters}'
+    #return random_stringletter
+
+
+# In[89]:
 
 def generate_random_string():
     # Zufällige Buchstabenkette erstellen
@@ -78,11 +133,79 @@ for _ in range(30):
     array_stringletters.append(zeichenkette)
 
 
+# In[90]:
+
+
+# array mit 30 verschiedenen Zeichenketten anzeigen lassen:
+array_stringletters
+
+# OK - nur nicht immer genau 5 Zeichen pro Kette > irrelevant für die simulierten Daten. 
+
+
+# In[92]:
+
+
 sim_data['Vollständiger Name'] = ''
 
 zeichenkette = np.random.choice(array_stringletters, size=1000, replace=True)
 sim_data['Vollständiger Name'] = zeichenkette
     
+sim_data.head()
+
+
+# In[93]:
+
+
+# Überprüfen, ob nur 30 eindeutige Werte erstellt worden sind:
+sim_data['Vollständiger Name'].nunique()
+
+# OK!
+
+
+# In[94]:
+
+
+sim_data['Vollständiger Name'].unique()
+
+
+# In[95]:
+
+
+# Verteilung überprüfen
+value_counts = sim_data['Vollständiger Name'].value_counts()
+value_counts
+
+# Versuch 1: Jeder Schüler war ca. geich oft auf der Homepage... nicht sehr repräsentativ!
+# Versuch 2: zufällig verteilt - ja - ABER niemand dabei, der nur 1-2 mal RELAX besucht hat...
+
+
+# In[97]:
+
+
+# Versuch 3: Häufigkeitsverteilung selbst angeben, um Extreme abbilden zu können - z.B. ein Name war nur 1x auf RELAX
+
+#sim_data['Vollständiger Name'] = ''
+
+#haeufigkeiten = [85, 70, 67, 67, 64, 55, 50, 40, 40, 38, 35, 25, 25, 25, 25, 25, 25, 25, 21, 21, 21, 14, 13, 12, 5, 3, 3,
+#                 1, 1, 1]
+
+#zeichenkette = random.choices(array_stringletters, weights=haeufigkeiten, k=1000)
+#sim_data['Vollständiger Name'] = zeichenkette
+    
+#sim_data.head()
+
+
+# In[98]:
+
+
+# Verteilung überprüfen - ok...
+#value_counts = sim_data['Vollständiger Name'].value_counts()
+#value_counts
+
+
+# In[100]:
+
+
 # Versuch 4: normalverteilte Verteilung:
 
 anzahl_zeichenketten = len(array_stringletters)
@@ -100,7 +223,21 @@ gewichte = gewichte / np.sum(gewichte)
 zeichenketten_verteilung = random.choices(array_stringletters, weights=gewichte, k=1000)
 sim_data['Vollständiger Name'] = zeichenketten_verteilung
 
+sim_data.head()
+
+
+# In[101]:
+
+
+# Verteilung überprüfen - bestes Ergebnis mit Normalverteilung - so lassen!
+value_counts = sim_data['Vollständiger Name'].value_counts()
+value_counts
+
+
 # ## 3) Betroffene/r Nutzer/in: oftmals '-', manchmal vollständiger Name 
+
+# In[103]:
+
 
 # in 95% der Zeilen soll das Minus '-' eingetragen werden. In den verbleibenden Zeilen soll eine beliebige
 # Zeichenkette aus dem array_stringletters herausgenommen werden.
@@ -118,8 +255,23 @@ indizes = np.random.choice(range(anzahl_zeilen), size=len(zeichenketten_verteilu
 
 # Eintragen der ausgewählten Zeichenketten in die entsprechenden Zeilen der Spalte
 sim_data.loc[indizes, 'Betroffene/r Nutzer/in'] = zeichenketten_verteilung
-            
+             
+
+sim_data.head()
+
+
+# In[104]:
+
+
+# Verteilung überprüfen - OK!
+value_counts_betr = sim_data['Betroffene/r Nutzer/in'].value_counts()
+value_counts_betr
+
+
 # ## 4) Ereigniskontext: dt. Text 
+
+# In[111]:
+
 
 ereigniskontext = ['Kurs: Statistik','Aufgabe: Lösungen', 'Datei: xxx', 'Abstimmung: xxx', 'Forum: xxx', 'Link/URL: xxx'] 
 
@@ -131,15 +283,35 @@ sim_data['Ereigniskontext'] = ereignis
 # Schreibfehler korrigieren - neue Spalte wurde hinzugefügt, diese wieder löschen... 
 #sim_data = sim_data.drop('Ereginiskontext', axis = 1)
     
+sim_data.head()
+
+
+# In[113]:
+
+
+# Verteilung überprüfen - gleichmäßig verteilt - ok für sim. Daten 
+value_counts_ekontext = sim_data['Ereigniskontext'].value_counts()
+value_counts_ekontext
 
 
 # ## 5) Komponente: ein Wort (System, Logdaten, Datei, Link/URL)
 
+# In[117]:
+
+
 components = ['Logdaten', 'Datei', 'System', 'Link/URL']
+
+
+# In[118]:
+
 
 # Datei: xxx > Datei; Link/URL: xxx > Link/URL, Kurs: Statistik > System 
 # Rest: ('Ereigniskontext', 'Forum: xxx', 'Abstimmung: xxx'. 'Aufgabe: Lösungen') > Logdaten
 # Beobachtung Bspl. Daten: Dateien, z.B. uebung5 ist manchmal unter Datei und manchmal unter System. 
+
+
+# In[122]:
+
 
 def fill_components(row):
     if ereigniskontext[2] in row['Ereigniskontext']:
@@ -151,11 +323,27 @@ def fill_components(row):
     else:
         return components[0] # Logdaten
 
+
+# In[123]:
+
+
 sim_data['Komponente'] = sim_data.apply(fill_components, axis=1)
+sim_data.head()
+
+
+# In[124]:
+
 
 # Häufigkeitsverteilung prüfen - theoretisch: System: 189, Datei: 161, Link/URL: 156, Logdaten: 494
 
+value_counts_components = sim_data['Komponente'].value_counts()
+value_counts_components
+
+
 # ## 6) Ereignisname: dt. Text 
+
+# In[141]:
+
 
 # beliebiger deutscher Text generieren und über die 1000 Zeilen verteilen:
 
@@ -167,10 +355,26 @@ num_rows = 1000
 
 sim_data['Ereignisname'] = random.choices(words_dt, k=num_rows)
 
+
+sim_data.head()
+
+
+# In[143]:
+
+
+# Verteilung ausgeben - gleichmäßig verteilt ok
+value_counts_ename = sim_data['Ereignisname'].value_counts()
+value_counts_ename
+
+
 # ## 7) Beschreibung: engl. Text 
+
+# In[153]:
+
 
 # Spalte auffüllen mit Standard-Sätzen: The user with id {id_name_Vollständiger Name} + Bsp. Sätze 
 # Methode definieren
+
 
 def fill_description(row):
     
@@ -183,11 +387,26 @@ def fill_description(row):
     
     return f"{text_user} {id_name} {random_selec}"
 
+
+# In[154]:
+
+
 # Methode aufrufen, um die Spalte 'Beschreibung' zu füllen:
 sim_data['Beschreibung'] = sim_data.apply(fill_description, axis=1)
 
+sim_data.head()
+
+
 # ## 8) Herkunft: cli, ws, web 
+
+# In[ ]:
+
+
 # Verteilung: 5% cli, 10% ws, 85% web 
+
+
+# In[155]:
+
 
 total_rows = 1000
 cli_rows = int(total_rows * 0.05) # 5%
@@ -201,16 +420,40 @@ np.random.shuffle(words)
 
 sim_data['Herkunft'] = words
 
+sim_data.head()
+
+
+# In[156]:
+
+
+# Verteilung überprüfen 
+value_counts_herkunft = sim_data['Herkunft'].value_counts()
+value_counts_herkunft
+
+
 # ### Hinweis: Verteilung ohne Bezug auf das Ereignis / Komponente. Kann z.B. sein, dass sich 'cli' nicht auf einen
+# 
 # ### Admin-Job bezieht
 
 # ## 9) IP-Adresse: anonymisiert 
+
+# In[ ]:
+
+
 # Für jeden user soll eine IP-Adresse erstellt werden + für jede Zeile mit Herkunft == 'ws'
+
+
+# In[164]:
+
 
 # Methode zur Erstellung einer random-IP-Adresse:
 
 def generate_ip_address():
     return ".".join(str(np.random.randint(0, 256)) for _ in range(4))
+
+
+# In[168]:
+
 
 # Methode aufrufen
 
@@ -245,11 +488,41 @@ for _, row in sim_data.iterrows():
         
 sim_data['IP-Adresse'] = ip_addresses
 
+sim_data.head()
+
+
+# In[183]:
+
+
+# Anzahl an einzigartigen IP-Adressen ausgeben lassen - theoreitsch: Anzahl an user + ws Herkunft = 30 + 100 = 130x - OK!
+
+#count_value_counts_ip = len(sim_data['IP-Adresse'].value_counts())
+#count_value_counts_ip
+
+
+# In[180]:
+
+
+# IP-Adressen, die nur 1x vorkommen - erwartet wird 100 einzigartige IP-Adressen, da 100x ws - OK!
+
+#count_values_occuring_once = len(value_counts_ip[value_counts_ip == 1].index)
+#count_values_occuring_once
+
+
 # ## 10) sim_data ohne Zusatzspalte abspeichern als .csv Datei
+
+# In[187]:
+
+
 #sim_data.to_csv('simulated_data_noGrade.csv', index=False)
+
+
+# In[192]:
+
 
 # als excel Datei
 #sim_data.to_excel('simulated_data_noGrade.xlsx', index=False)
+
 
 # # 11) Hinzufügen einer neuen Spalte 'Abschlussnote'
 # 
@@ -269,6 +542,10 @@ sim_data['IP-Adresse'] = ip_addresses
 # Annahmen 'unzureichender Studierender 3,6 - 5,0'
 # - <= 15 Einträge im df 
 # - Nie eine Datei geöffnet 
+
+# In[212]:
+
+
 def berechne_abschlussnote(row):
     name = row['Vollständiger Name']
     component = row['Komponente']
@@ -285,11 +562,69 @@ def berechne_abschlussnote(row):
     
     else:
         return round(random.uniform(3.6, 5.0), 1)
+    
 
 # Neue Spalte 'Abschlussnote' hinzufügen
 sim_data['Abschlussnote'] = sim_data.apply(berechne_abschlussnote, axis=1)
 
+sim_data.head()
+
+
+# In[213]:
+
+
+# Diagramm Verteilung der Abschlussnote:
+
+#plt.hist(sim_data['Abschlussnote'], bins=15, edgecolor='black')
+
+#plt.xlabel('Abschlussnote')
+#plt.ylabel('Anzahl')
+#plt.title('Verteilung der Abschlussnoten')
+
+#plt.show()
+
+
+# In[229]:
+
+
+# Gruppierung nach Namens-ID und Berechnung der Abschlussnote
+#grouped = sim_data.groupby('Vollständiger Name').agg({'Abschlussnote': 'mean', 'Vollständiger Name': 'count'})
+#grouped.rename(columns={'Vollständiger Name': 'Anzahl'}, inplace=True)
+
+#plt.scatter(grouped['Anzahl'], grouped['Abschlussnote'], color='blue')
+
+#plt.xlabel('Anzahl der RELAX-Einträge')
+#plt.ylabel('Abschlussnote')
+#plt.title('Verteilung der Abschlussnoten nach Anzahl der RELAX-Einträge')
+
+#plt.show()
+
+
+# In[222]:
+
+
+filtered_datei = sim_data[sim_data['Komponente'] == 'Datei']
+
+# Gruppierung nach ID und Berechnung der Durchschnittsnote und Anzahl der Vorkommen von 'Datei'
+#grouped = filtered_datei.groupby('Vollständiger Name').agg({'Abschlussnote': 'mean', 'Komponente': 'count'})
+#grouped.rename(columns={'Komponente': 'Anzahl Datei'}, inplace=True)
+
+# Diagramm erstellen
+#plt.scatter(grouped['Anzahl Datei'], grouped['Abschlussnote'], color='blue')
+
+# Achsentitel und Diagrammtitel hinzufügen
+#plt.xlabel('Anzahl der Vorkommen von "Datei" für eine ID')
+#plt.ylabel('Abschlussnote')
+#plt.title('Verbindung von Abschlussnote und Anzahl der Vorkommen von "Datei" nach ID')
+
+# Diagramm anzeigen
+#plt.show()
+
+
 # ### 11) Neue Simulierte Daten inkl. Abschlussnote als .csv und .xlsx Datei abspeichern
+
+# In[230]:
+
 def save_file_with_version(filename, container_path, data_frame):
 # Überprüfe, ob die Datei bereits existiert
     if os.path.exists(os.path.join(container_path, filename)):
@@ -317,5 +652,14 @@ def save_file_with_version(filename, container_path, data_frame):
 
 save_file_with_version(SIMDATA_FILENAME, SIMDATA_FOLDERNAME, sim_data)
 
+#sim_data.to_csv('/home/jovyan/00_sim_data_output/simulated_data_grade.csv', index=False)
 print("Ausschnitt der simulierten Daten:")
 print(sim_data.head())
+
+#fkt. nicht - modul 'container' fehlt...
+
+def copy_file_to_host(src_path, dest_path):
+    command = f"docker cp {src_path} data_generator:{dest_path}"
+    subprocess.run(command, shell=True)
+
+#copy_file_to_host('/home/jovyan/00_sim_data_output/simulated_data_grade.csv', '/home/aml/data_generator_output/simulated_data_grade.csv')

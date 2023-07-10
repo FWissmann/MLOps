@@ -38,14 +38,13 @@ print(f'{gctm()}Reading CSV file ...')
 if 'MONITORING_FILE' in os.environ:
     testfile = os.environ['MONITORING_FILE']
 else:
-    testfile = f'./data/03_gx_dataprep/03_dataprep_gx_testdata.parquet'
+    #testfile = f'C:\Git\MLOps\data\\03_dataprep_gx_testdata.parquet'
+    testfile = f'C:\Git\MLOps\data\\02_dataprep_testdata.csv'
 
 print(f'{gctm()}Datei für Test: {testfile}')
 # making dataframe
-if testfile.endswith('.parquet'):
-    df = pd.read_parquet(testfile)
-elif testfile.endswith('.csv'):
-    df = pd.read_csv(testfile)
+#df = pd.read_parquet(testfile)
+df = pd.read_csv(testfile)
 
 if n_rows > 0:
     df = df.head(n_rows)
@@ -99,8 +98,6 @@ if response.status_code == 200:
         # Daten erfolgreich auf Whylabs uebertragen
         print(f'{gctm()}Profil wurde zu WhyLabs übertragen.') 
 
-        df_results.to_csv(f'./data/05_results/05_results.csv', index=False)
-
     else:
         print(f'{gctm()}Dataframe enthält Spalte bewertung nicht, daher Logging von Inputs')
         os.environ["WHYLABS_DEFAULT_DATASET_ID"] = 'model-10' #can also be provided as dataset_id param in WhyLabsWriter constructor
@@ -115,8 +112,6 @@ if response.status_code == 200:
 
         # Daten erfolgreich auf Whylabs uebertragen
         print(f'{gctm()}Profil wurde zu WhyLabs übertragen.') 
-
-        df_results.to_csv(f'./data/05_results/05_results.csv', index=False)
 
 else:
     print(f'Error in batch prediction: {response.status_code}, {response.text}')
