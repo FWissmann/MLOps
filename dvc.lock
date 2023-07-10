@@ -196,8 +196,8 @@ stages:
       md5: 707e24df87037e714ac158029b5ca435
       size: 28350
     - path: ./src/monitoring_whylogs/monitoring_whylogs_batch.py
-      md5: fcb443aff3cb89454303c2b4b775bff6
-      size: 4016
+      md5: 01f756343ac63aaa18cd61df4b175e70
+      size: 4239
     outs:
     - path: ./data/05_results/05_results.csv
       md5: e5228504f14bdf98cf8d5c737d3fc725

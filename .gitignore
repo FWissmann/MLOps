@@ -11,3 +11,48 @@ data/03_gx_dataprep
 data/04_model_results
 # Misc
 z_MISC
+
+# Created by https://www.toptal.com/developers/gitignore/api/ssh,visualstudiocode,linux
+# Edit at https://www.toptal.com/developers/gitignore?templates=ssh,visualstudiocode,linux
+
+### Linux ###
+*~
+
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
+
+### SSH ###
+**/.ssh/id_*
+**/.ssh/*_id_*
+**/.ssh/known_hosts
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+# End of https://www.toptal.com/developers/gitignore/api/ssh,visualstudiocode,linux
+.vscode/settings.json

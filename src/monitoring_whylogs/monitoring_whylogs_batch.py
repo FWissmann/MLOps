@@ -38,7 +38,7 @@ print(f'{gctm()}Reading CSV file ...')
 if 'MONITORING_FILE' in os.environ:
     print(f'{gctm()}env MONITORING_FILE is set')
     testfile = os.environ['MONITORING_FILE']
-elif sys.argv[1]:
+elif sys.argv and len(sys.argv) > 1:
     print(f'{gctm()}sys.argv[1] is set')   
     testfile = sys.argv[1]
 else:
