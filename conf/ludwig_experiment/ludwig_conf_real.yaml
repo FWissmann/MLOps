@@ -48,4 +48,3 @@ input_features:
 output_features:
     - name: bewertung
       type: number
-      reduce_input: mean
