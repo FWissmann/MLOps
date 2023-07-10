@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
 import pandas as pd
 import numpy as np
 import os
-import matplotlib.pyplot as plt
-import seaborn as sns
+from datetime import datetime
+import locale
 
 # Check if environmet variables are set otherwise use defaults
 # Input variables
@@ -31,11 +29,11 @@ else:
     DATAPREP_REALDATA_FOLDERNAME = '/app/data/02_dataprep'
 
 if 'DATAPREP_REALDATA_FILENAME_LOG' in os.environ:
-    DATAPREP_REALDATA_FILENAME_LOG = os.environ['DATAPREP_REALDATA_FILENAME']
+    DATAPREP_REALDATA_FILENAME_LOG = os.environ['DATAPREP_REALDATA_FILENAME_LOG']
 else:  
-    DATAPREP_REALDATA_FILENAME_LOG = '02_dataprep_realdata_logs.csv'
+    DATAPREP_REALDATA_FILENAME_LOG = '02_dataprep_testdata.csv'
 if 'DATAPREP_REALDATA_FOLDERNAME_LOG' in os.environ:
-    DATAPREP_REALDATA_FOLDERNAME_LOG = os.environ['DATAPREP_REALDATA_PATH']
+    DATAPREP_REALDATA_FOLDERNAME_LOG = os.environ['DATAPREP_REALDATA_FOLDERNAME_LOG']
 else:
     DATAPREP_REALDATA_FOLDERNAME_LOG = '/app/data/02_dataprep'
 
@@ -45,26 +43,17 @@ log_data = pd.read_csv(GX_REALDATA_FILENAME_LOG)
 # zweites CSV einlesen mit den Abschlussnoten
 grade_data = pd.read_csv(GX_REALDATA_FILENAME_GRADES)
 
-log_data.head()
-#grade_data.head()
-
-log_data.info()
-
 # eindeutige Werte der Spalten 'Voll.Name', 'Komponente', 'Herkunft' von sim_data als array ausgeben 
 
 unique_name = log_data['Vollständiger Name'].unique()
 unique_komponente = log_data['Komponente'].unique()
 unique_herkunft = log_data['Herkunft'].unique()
 
-# länge der Arrays ausgeben 
+# Länge der Arrays ausgeben 
 
 length_name = len(unique_name)
 length_komponente = len(unique_komponente)
 length_herkunft = len(unique_herkunft)
-
-
-# In[5]:
-
 
 # neues df mit Auswertparameter von sim_data nach Spalte 'Vollständiger Name' erstellen
 # pro eindeutiger Parameter in den Spalten 'Komponente' und 'Herkunft' soll eine neue Spalte in grouped_sim erstellen werden
@@ -83,26 +72,8 @@ grouped_data = log_data.groupby('Vollständiger Name').agg({
     'IP-Adresse': 'nunique'
 }).reset_index()
 
-grouped_data
 
-
-# In[6]:
-
-
-# Check Anzahl der Studierende
-
-len(grouped_data['Vollständiger Name'])
-
-
-# In[7]:
-
-
-from datetime import datetime
-import locale #, datetime
-
-#locale.setlocale(locale.LC_TIME, locale.normalize("de_DE"))
 locale.setlocale(locale.LC_TIME, "de_DE.UTF-8") # german
-'de_DE'
 
 # Anzahl der Vorkommen eines Users im ursprünglichen sim_data
 user_counts = log_data['Vollständiger Name'].value_counts().rename('Anzahl_log_all')
@@ -171,86 +142,36 @@ for i in range(len(period_boundaries)):
 print(log_counts.head())
 print(grouped_data.head())
 
-# In[8]:
-
-
 # Anzahl log-Einträge mit sim_data mergen nach 'Vollständiger Name'
 grouped_data_log = grouped_data.merge(log_counts, on='Vollständiger Name')
-
-grouped_data_log.head()
-
-
-# In[9]:
-
 
 # Vollständiger Name doppelt - zweite Spalte droppen
 grouped_data_log = grouped_data_log.drop(('Vollständiger Name', ''), axis=1)
 #grouped_data_log.rename(columns={'Vollständiger Name': 'Vollstaendiger Name'})
 
-
-# In[10]:
-
-
-# Übersicht über 2. df mit Note grade_data
-grade_data
-
-
-# In[11]:
-
-
-
 def check_grades(grade_csv):
     if grade_csv['bewertung'].isnull().all():
         # Wenn die Spalte 'bewertung' leer ist > Produktionsdaten, keine Trainingsdaten
-        grouped_data_log_rename = grouped_data_log.rename(columns={'Vollständiger Name': 'Vollstaendiger Name', "('Komponente', 'Anzahl Geführte Touren')": "('Komponente', 'Anzahl Gefuehrte Touren')", "('Komponente', 'Anzahl Übersicht für Teilnehmer/in')": "('Komponente', 'Anzahl Uebersicht fuer Teilnehmer/in')", "('Komponente', 'Anzahl Übersicht')": "('Komponente', 'Anzahl Uebersicht')"})
+        grouped_data_log_rename = grouped_data_log.rename(columns={'Vollständiger Name': 'Vollstaendiger Name', ('Komponente', 'Anzahl Geführte Touren'): ('Komponente', 'Anzahl Gefuehrte Touren'), ('Komponente', 'Anzahl Übersicht für Teilnehmer/in'): ('Komponente', 'Anzahl Uebersicht fuer Teilnehmer/in'), ('Komponente', 'Anzahl Übersicht'): ('Komponente', 'Anzahl Uebersicht')})
         # gleich als CSV file abspeichern
         filename = DATAPREP_REALDATA_FOLDERNAME_LOG + '/' + DATAPREP_REALDATA_FILENAME_LOG
         grouped_data_log_rename.to_csv(filename, index=False)
-        return grouped_data_log.head()
-    
-    
+        print(f'CSV-Datei mit Testdaten wurde erstellt. Dateiname: {filename}')
+        return grouped_data_log.head()    
     else:
         # ansonsten Spalte mit den Noten anpassen:
         # Bewertung / 100 ergibt die Schulnote
-        grade_csv['bewertung'] = grade_csv['bewertung']/100
-        
+        grade_csv['bewertung'] = grade_csv['bewertung']/100        
         # Wenn es zu dem User keine Bewertung gibt - ersetzte NaN mit 5.0
-        grade_csv['bewertung'] = grade_csv['bewertung'].fillna(5.0)
-        
+        grade_csv['bewertung'] = grade_csv['bewertung'].fillna(5.0)       
         # Abschlussnote aus dem zweiten df grade_data_log dem jeweiligen User zuordnen
         grouped_data_grade = pd.merge(grouped_data_log, grade_csv, on='Vollständiger Name', how='left')
         grouped_data_grade = grouped_data_grade.rename(columns={'Vollständiger Name': 'Vollstaendiger Name', ('Komponente', 'Anzahl Geführte Touren'): ('Komponente', 'Anzahl Gefuehrte Touren'), ('Komponente', 'Anzahl Übersicht für Teilnehmer/in'): ('Komponente', 'Anzahl Uebersicht fuer Teilnehmer/in'), ('Komponente', 'Anzahl Übersicht'): ('Komponente', 'Anzahl Uebersicht')})
-        # Als CSV-file abspeichern
         grouped_data_grade['bewertung'] = grouped_data_grade['bewertung'].fillna(5.0)
+        # Als CSV-file abspeichern
         filename = DATAPREP_REALDATA_FOLDERNAME + '/' + DATAPREP_REALDATA_FILENAME
         grouped_data_grade.to_csv(filename, index=False)
-        
+        print(f'CSV-Datei mit Traindaten wurde erstellt. Dateiname: {filename}')
         return grouped_data_grade.head()
 
-
-# In[12]:
-
-
 check_grades(grade_data)
-
-
-# In[13]:
-
-
-# In Methode integriert
-# Wenn es zu dem User keine Bewertung gibt - ersetzte NaN mit 5.0
-# grade_data['bewertung'] = grade_data['bewertung'].fillna(5.0)
-# grade_data
-
-
-# In[14]:
-
-
-# In Methode integriert
-
-# Abschlussnote aus dem zweiten df grade_data_log dem jeweiligen User zuordnen
-
-# grouped_data_grade = pd.merge(grouped_data_log, grade_data, on='Vollständiger Name', how='left')
-
-# grouped_data_grade.head()
-

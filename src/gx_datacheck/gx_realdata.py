@@ -35,7 +35,6 @@ if 'GX_REALDATA_GRADE_PATH' in os.environ:
 else:
     GX_REALDATA_GRADE_PATH = '/app/data/01_gx'
 
-
 # df ausgeben lassen 
 log_test = pd.read_csv(REALDATA_LOG_FILENAME)
 print(log_test.head())
@@ -44,8 +43,6 @@ print(log_test.columns)
 grade_test = pd.read_csv(REALDATA_GRADE_FILENAME)
 print(grade_test.head())
 print(grade_test.columns)
-
-
 
 context = gx.get_context()
 
@@ -73,8 +70,6 @@ validator_grade.expect_column_to_exist('bewertung')
 
 #validator_grade.expect_column_names_to_be_in_set('Vollständiger Name')
 #validator_grade.expect_column_names_to_be_in_set('bewertung')
-
-
 
 # #### Daten auf Basis der Anforderungen validieren 
 
@@ -141,4 +136,3 @@ if checkpoint_result_grade["success"]:
     save_file_with_version(GX_REALDATA_GRADE_FILENAME, GX_REALDATA_GRADE_PATH, grade_data)
 else:
     print("Die Expectations für die Notenliste wurden nicht erfüllt.")
-

@@ -73,3 +73,33 @@ stages:
     deps:
     - ./conf/ludwig_experiment/ludwig_conf_real.yaml
     - ./data/03_gx_dataprep/03_dataprep_gx_realdata.parquet
+  data_check_test:
+    cmd: docker run -i --rm --name gx_testdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ --env REALDATA_LOG_FILENAME=/app/data/00_rawdata/${testdata}/${testdata}_log.csv --env REALDATA_GRADE_FILENAME=/app/data/00_rawdata/${testdata}/${testdata}_grades.csv --env GX_REALDATA_GRADE_FILENAME=01_gx_testdata_grades.csv --env GX_REALDATA_LOG_FILENAME=01_gx_testdata_logs.csv gx_realdata:3
+    deps:
+    - ./data/00_rawdata/${testdata}
+    - ./src/gx_datacheck/gx_realdata.py
+    outs:
+    - ./data/01_gx/01_gx_testdata_grades.csv
+    - ./data/01_gx/01_gx_testdata_logs.csv
+  data_prep_test:
+    cmd: docker run -i --rm --name dataprep_testdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/dataprep,dst=/app/ --env GX_REALDATA_FILENAME_LOG=./data/01_gx/01_gx_testdata_logs.csv --env GX_REALDATA_FILENAME_GRADES=./data/01_gx/01_gx_testdata_grades.csv --env DATAPREP_REALDATA_FILENAME=02_dataprep_testdata.csv  dataprep_realdata:3
+    deps:
+    - ./data/01_gx/01_gx_testdata_grades.csv
+    - ./data/01_gx/01_gx_testdata_logs.csv
+    - ./src/dataprep/dataprep_realdata.py
+    outs:
+    - ./data/02_dataprep/02_dataprep_testdata.csv
+  data_prep_gx_test:
+    cmd: docker run -i --rm --name dataprep_gx_testdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data --mount type=bind,src=/home/aml/MLOps/src/gx_dataprep,dst=/app/ --env DATAPREP_DATA_FILENAME=/app/data/02_dataprep/02_dataprep_testdata.csv --env DATAPREP_GX_DATA_FILENAME=03_dataprep_gx_testdata.parquet dataprep_gx_data:4
+    deps:
+    - ./data/02_dataprep/02_dataprep_testdata.csv
+    - ./src/gx_dataprep/gx_data_grouped.py
+    outs:
+    - ./data/03_gx_dataprep/03_dataprep_gx_testdata.parquet
+  test:
+    cmd: python ./src/monitoring_whylogs/monitoring_whylogs_batch.py
+    deps:
+    - ./data/03_gx_dataprep/03_dataprep_gx_testdata.parquet
+    - ./src/monitoring_whylogs/monitoring_whylogs_batch.py
+    outs:
+    - ./data/05_results/05_results.csv
