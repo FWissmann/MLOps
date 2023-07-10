@@ -17,33 +17,9 @@ input_features:
       type: number
     - name: ('Herkunft', 'Anzahl web')
       type: number
-    - name: ('Herkunft', 'Anzahl restore')
-      type: number
     - name: ('IP-Adresse', 'nunique')
       type: number
     - name: Anzahl_log_all
-      type: number
-    - name: Anzahl_log_f1
-      type: number
-    - name: Anzahl_log_f2
-      type: number
-    - name: Anzahl_log_f3
-      type: number
-    - name: Anzahl_log_f4
-      type: number
-    - name: Anzahl_log_f5
-      type: number
-    - name: Anzahl_log_f6
-      type: number
-    - name: Anzahl_log_f7
-      type: number
-    - name: Anzahl_log_f8
-      type: number
-    - name: Anzahl_log_f9
-      type: number
-    - name: Anzahl_log_f10
-      type: number
-    - name: Anzahl_log_f11
       type: number
 output_features:
     - name: bewertung

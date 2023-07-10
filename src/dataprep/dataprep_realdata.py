@@ -6,6 +6,7 @@ import numpy as np
 import os
 from datetime import datetime
 import locale
+from sklearn.utils import resample
 
 # Check if environmet variables are set otherwise use defaults
 # Input variables
@@ -163,11 +164,14 @@ def check_grades(grade_csv):
         # Bewertung / 100 ergibt die Schulnote
         grade_csv['bewertung'] = grade_csv['bewertung']/100        
         # Wenn es zu dem User keine Bewertung gibt - ersetzte NaN mit 5.0
-        grade_csv['bewertung'] = grade_csv['bewertung'].fillna(5.0)       
+        grade_csv.dropna(axis=0, subset=['bewertung'], inplace=True)    
         # Abschlussnote aus dem zweiten df grade_data_log dem jeweiligen User zuordnen
         grouped_data_grade = pd.merge(grouped_data_log, grade_csv, on='Vollständiger Name', how='left')
         grouped_data_grade = grouped_data_grade.rename(columns={'Vollständiger Name': 'Vollstaendiger Name', ('Komponente', 'Anzahl Geführte Touren'): ('Komponente', 'Anzahl Gefuehrte Touren'), ('Komponente', 'Anzahl Übersicht für Teilnehmer/in'): ('Komponente', 'Anzahl Uebersicht fuer Teilnehmer/in'), ('Komponente', 'Anzahl Übersicht'): ('Komponente', 'Anzahl Uebersicht')})
-        grouped_data_grade['bewertung'] = grouped_data_grade['bewertung'].fillna(5.0)
+        grouped_data_grade.dropna(axis=0, subset=['bewertung'], inplace=True)
+        grouped_data_grade['bewertung'] = grouped_data_grade['bewertung'].round(0)
+
+        grouped_data_grade = resample(grouped_data_grade, replace=True, n_samples=500, random_state=42)
         # Als CSV-file abspeichern
         filename = DATAPREP_REALDATA_FOLDERNAME + '/' + DATAPREP_REALDATA_FILENAME
         grouped_data_grade.to_csv(filename, index=False)

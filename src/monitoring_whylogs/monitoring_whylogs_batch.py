@@ -104,7 +104,8 @@ if response.status_code == 200:
         # Daten erfolgreich auf Whylabs uebertragen
         print(f'{gctm()}Profil wurde zu WhyLabs übertragen.') 
 
-        df_results.to_csv(f'./data/05_results/05_results.csv', index=False)
+        df_results[["Vollstaendiger Name", "bewertung", "output"]].to_csv(f'./data/05_results/05_results.csv', index=False)
+        print (f'{gctm()}Ergebnisse wurden in ./data/05_results/05_results.csv gespeichert.')
 
     else:
         print(f'{gctm()}Dataframe enthält Spalte bewertung nicht, daher Logging von Inputs')
@@ -121,7 +122,8 @@ if response.status_code == 200:
         # Daten erfolgreich auf Whylabs uebertragen
         print(f'{gctm()}Profil wurde zu WhyLabs übertragen.') 
 
-        df_results.to_csv(f'./data/05_results/05_results.csv', index=False)
+        df_results["Vollstaendiger Name", "bewertung", "output"].to_csv(f'./data/05_results/05_results.csv', index=False)
+        print(f'{gctm()}Ergebnisse wurden in ./data/05_results/05_results.csv gespeichert.')
 
 else:
     print(f'Error in batch prediction: {response.status_code}, {response.text}')
