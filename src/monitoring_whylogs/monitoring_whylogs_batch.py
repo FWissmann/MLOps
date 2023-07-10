@@ -1,7 +1,7 @@
 # import pandas module
 from datetime import datetime
 from whylogs.api.writer.whylabs import WhyLabsWriter
-import requests, json, os, pandas as pd, whylogs as why
+import requests, json, sys, os, pandas as pd, whylogs as why
 
 # Environment variables for WhyLabs
 os.environ["WHYLABS_DEFAULT_ORG_ID"] = "org-cF55SZ" # ORG-ID is case sensistive
@@ -36,8 +36,13 @@ print(f'{gctm()}Reading CSV file ...')
 # Check if environmet variables are set otherwise use defaults
 # Input variables
 if 'MONITORING_FILE' in os.environ:
+    print(f'{gctm()}env MONITORING_FILE is set')
     testfile = os.environ['MONITORING_FILE']
+elif sys.argv[1]:
+    print(f'{gctm()}sys.argv[1] is set')   
+    testfile = sys.argv[1]
 else:
+    print(f'{gctm()}No input file specified, using default')
     testfile = f'./data/03_gx_dataprep/03_dataprep_gx_testdata.parquet'
 
 print(f'{gctm()}Datei für Test: {testfile}')
