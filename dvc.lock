@@ -84,26 +84,26 @@ stages:
       md5: 8bf129c757e731bde0258341a20e60c2
       size: 1478741
     - path: ./src/dataprep/dataprep_realdata.py
-      md5: cb92e03cff9b18071373281861929057
-      size: 8756
+      md5: 6dab6d465fe211ae755f03b2a72e7b41
+      size: 8846
     outs:
     - path: ./data/02_dataprep/02_dataprep_realdata.csv
-      md5: 5008eba1b69c8a25f3b593355e5fc063
-      size: 6407
+      md5: be79dedfb77d2a043e9565345e54dbfb
+      size: 6563
   data_prep_gx_real:
     cmd: docker run -i --rm --name dataprep_gx_realdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/src/gx_dataprep,dst=/app/ dataprep_gx_data:4
     deps:
     - path: ./data/02_dataprep/02_dataprep_realdata.csv
-      md5: 5008eba1b69c8a25f3b593355e5fc063
-      size: 6407
+      md5: be79dedfb77d2a043e9565345e54dbfb
+      size: 6563
     - path: ./src/gx_dataprep/gx_data_grouped.py
       md5: ce4f37ebf65daf924a737d1b418a7fed
       size: 2909
     outs:
     - path: ./data/03_gx_dataprep/03_dataprep_gx_realdata.parquet
-      md5: b1e9aece54e15910ba8372ba557f0726
-      size: 24293
+      md5: e7194a60b565d892311b6e9475c3bc34
+      size: 23988
   train_real:
     cmd: docker run -i --rm --name ludwig_experiment_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/conf/ludwig_experiment,dst=/app/conf --env
@@ -113,11 +113,11 @@ stages:
       --model_name realdata
     deps:
     - path: ./conf/ludwig_experiment/ludwig_conf_real.yaml
-      md5: f532c0aacf7d1b9ee846547b68fcb20b
-      size: 1377
+      md5: 9f2fb93eb804f817b340030154258503
+      size: 1385
     - path: ./data/03_gx_dataprep/03_dataprep_gx_realdata.parquet
-      md5: b1e9aece54e15910ba8372ba557f0726
-      size: 24293
+      md5: e7194a60b565d892311b6e9475c3bc34
+      size: 23988
   data_prep_gx:
     cmd: docker run -i --rm --name dataprep_gx_simdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/src/gx_dataprep,dst=/app/ --env DATAPREP_DATA_FILENAME=/app/data/02_dataprep/02_dataprep_simdata.csv
@@ -135,26 +135,25 @@ stages:
       size: 18477
   data_check_test:
     cmd: docker run -i --rm --name gx_testdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
-      --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ --env REALDATA_LOG_FILENAME=/app/data/00_rawdata/RTWIBStat_SS23/RTWIBStat_SS23_log.csv
-      --env 
-      REALDATA_GRADE_FILENAME=/app/data/00_rawdata/RTWIBStat_SS23/RTWIBStat_SS23_grades.csv
+      --mount type=bind,src=/home/aml/MLOps/src/gx_datacheck,dst=/app/ --env REALDATA_LOG_FILENAME=/app/data/00_rawdata/RTWIBSE_W22/RTWIBSE_W22_log.csv
+      --env REALDATA_GRADE_FILENAME=/app/data/00_rawdata/RTWIBSE_W22/RTWIBSE_W22_grades.csv
       --env GX_REALDATA_GRADE_FILENAME=01_gx_testdata_grades.csv --env GX_REALDATA_LOG_FILENAME=01_gx_testdata_logs.csv
       gx_realdata:3
     deps:
-    - path: ./data/00_rawdata/RTWIBStat_SS23
-      md5: 70106b09ca0236cb9714b442028b6faf.dir
-      size: 3237431
+    - path: ./data/00_rawdata/RTWIBSE_W22
+      md5: 1762eeb756acde0c2ca017dbf54e73ca.dir
+      size: 1479271
       nfiles: 2
     - path: ./src/gx_datacheck/gx_realdata.py
       md5: 991d30e4bcb89c71888b8645322297c5
       size: 5464
     outs:
     - path: ./data/01_gx/01_gx_testdata_grades.csv
-      md5: ce527eb967a8780496ef12253bf34050
-      size: 30
+      md5: e8fe422073abf9454a217c48022abe6f
+      size: 530
     - path: ./data/01_gx/01_gx_testdata_logs.csv
-      md5: 664adea64de5f8eed6656213b7a59ecd
-      size: 3237401
+      md5: 8bf129c757e731bde0258341a20e60c2
+      size: 1478741
   data_prep_test:
     cmd: docker run -i --rm --name dataprep_testdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/src/dataprep,dst=/app/ --env GX_REALDATA_FILENAME_LOG=./data/01_gx/01_gx_testdata_logs.csv
@@ -162,33 +161,33 @@ stages:
       DATAPREP_REALDATA_FILENAME=02_dataprep_testdata.csv  dataprep_realdata:3
     deps:
     - path: ./data/01_gx/01_gx_testdata_grades.csv
-      md5: ce527eb967a8780496ef12253bf34050
-      size: 30
+      md5: e8fe422073abf9454a217c48022abe6f
+      size: 530
     - path: ./data/01_gx/01_gx_testdata_logs.csv
-      md5: 664adea64de5f8eed6656213b7a59ecd
-      size: 3237401
+      md5: 8bf129c757e731bde0258341a20e60c2
+      size: 1478741
     - path: ./src/dataprep/dataprep_realdata.py
-      md5: cb92e03cff9b18071373281861929057
-      size: 8756
+      md5: 6dab6d465fe211ae755f03b2a72e7b41
+      size: 8846
     outs:
     - path: ./data/02_dataprep/02_dataprep_testdata.csv
-      md5: 5dc042e1adfd79058d998928d8b4231b
-      size: 6896
+      md5: be79dedfb77d2a043e9565345e54dbfb
+      size: 6563
   data_prep_gx_test:
     cmd: docker run -i --rm --name dataprep_gx_testdata_single --mount type=bind,src=/home/aml/MLOps/data,dst=/app/data
       --mount type=bind,src=/home/aml/MLOps/src/gx_dataprep,dst=/app/ --env DATAPREP_DATA_FILENAME=/app/data/02_dataprep/02_dataprep_testdata.csv
       --env DATAPREP_GX_DATA_FILENAME=03_dataprep_gx_testdata.parquet dataprep_gx_data:4
     deps:
     - path: ./data/02_dataprep/02_dataprep_testdata.csv
-      md5: 5dc042e1adfd79058d998928d8b4231b
-      size: 6896
+      md5: be79dedfb77d2a043e9565345e54dbfb
+      size: 6563
     - path: ./src/gx_dataprep/gx_data_grouped.py
       md5: ce4f37ebf65daf924a737d1b418a7fed
       size: 2909
     outs:
     - path: ./data/03_gx_dataprep/03_dataprep_gx_testdata.parquet
-      md5: 707e24df87037e714ac158029b5ca435
-      size: 28350
+      md5: e7194a60b565d892311b6e9475c3bc34
+      size: 23988
   test:
     cmd: python ./src/monitoring_whylogs/monitoring_whylogs_batch.py
     deps:

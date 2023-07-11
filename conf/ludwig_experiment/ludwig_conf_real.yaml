@@ -47,4 +47,5 @@ input_features:
       type: number
 output_features:
     - name: bewertung
-      type: number
+      type: binary
+      
