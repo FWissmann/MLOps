@@ -1,0 +1,21 @@
+@startuml DVC Overview
+
+class Git {
+    +commit()
+    +checkout()
+}
+
+class DVC {
+    +add()
+    +push()
+    +pull()
+}
+
+class ProjectFolder {
+    -File[] files
+}
+
+Git "1" <-- "1" DVC : augments
+ProjectFolder "1" <-- "1" DVC : tracks
+
+@enduml
