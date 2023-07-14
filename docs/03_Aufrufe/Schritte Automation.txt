@@ -1,29 +1,108 @@
-Flow:
+Steuerung über DVC Pipeline, definiert in dvc.yaml, kann mit dvc dag dargestellt werden. 
 
-#container data_generator, gx_datacheck und monitoring_whylogs laufen immer
+Pipeline Simdaten Modeltraining
+  +----------+
+  | data_gen |
+  +----------+
+        *
+        *
+        *
+ +------------+
+ | data_check |
+ +------------+
+        *
+        *
+        *
+  +-----------+
+  | data_prep |
+  +-----------+
+        *
+        *
+        *
++--------------+
+| data_prep_gx |
++--------------+
+        *
+        *
+        *
+    +-------+
+    | train |
+    +-------+
 
-#Im Container data_generator data_generator starten mit 
-python3 data_gen.py
+Pipeline Echtdaten Modeltraining
++---------------------------------+
+| data/00_rawdata/RTWIBSE_W22.dvc |
++---------------------------------+
+                  *
+                  *
+                  *
+        +-----------------+
+        | data_check_real |
+        +-----------------+
+                  *
+                  *
+                  *
+        +----------------+
+        | data_prep_real |
+        +----------------+
+                  *
+                  *
+                  *
+       +-------------------+
+       | data_prep_gx_real |
+       +-------------------+
+                  *
+                  *
+                  *
+          +------------+
+          | train_real |
+          +------------+
 
-#gesamter Ordne rmit Versionen Kopieren auf Host:
-docker cp data_generator:/home/jovyan/00_sim_data_output /home/aml/data_generator_output
+Pipeline Echtdaten Prediction
++------------------------------------+
+| data/00_rawdata/RTWIBStat_SS23.dvc |
++------------------------------------+
+                   *
+                   *
+                   *
+          +-----------------+
+          | data_check_test |
+          +-----------------+
+                   *
+                   *
+                   *
+          +----------------+
+          | data_prep_test |
+          +----------------+
+                   *
+                   *
+                   *
+        +-------------------+
+        | data_prep_gx_test |
+        +-------------------+
+                   *
+                   *
+                   *
+               +------+
+               | test |
+               +------+
 
-#Order mit CSV Datei von host auf gx-Container kopieren:
-docker cp /home/aml/data_generator_output/00_sim_data_output gx_datacheck:/home/jovyan
-#...alle anderen Versionen auf Host in anderer Order kopieren
-docker cp gx_datacheck:/home/jovyan/01_sim_data_parquet /home/aml/LudwigAI/data/sim_data_versions
+Datenquellen für Echtdaten, können über dvc.yaml mit Variablen realdata und testdata für die Echtdaten Pipelines verwendet werden.
++-----------------------------------+
+| data/00_rawdata/RTWIBNet_SS23.dvc |
++-----------------------------------+
++----------------------------------+
+| data/00_rawdata/RTWIBSE_SS23.dvc |
++----------------------------------+
++----------------------------------+
+| data/00_rawdata/RTWIBNet_W22.dvc |
++----------------------------------+
++-----------------------------------+
+| data/00_rawdata/RTWIBStat_W22.dvc |
++-----------------------------------+
 
-#gx datacheck laufen lassen: 
-python3 gx_sim_data.py
-
-#Parquet File auf Host Ludwigai/data kopieren:
-docker cp gx_datacheck:/home/jovyan/01_sim_data_parquet/sim_data.parquet /home/aml/LudwigAI/data/sim_data.parquet
-
-[...Fabian...]
-
-Container monitoring_whylogs starten
-monitoring_whylogs.py
-> WhyLabs Plattform öffnen 
-
-
+Model Registry von MLFlow
++------------------------+
+| MLFlow/mlartifacts.dvc |
++------------------------+
 
